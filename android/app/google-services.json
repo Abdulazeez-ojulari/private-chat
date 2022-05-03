@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1095174593519",
+    "project_id": "privatechatclient",
+    "storage_bucket": "privatechatclient.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1095174593519:android:67d691a0ee42916f0d341a",
+        "android_client_info": {
+          "package_name": "com.example.privatechat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1095174593519-h7k0jmhoigha2ovbl63i39k1f36ps7ji.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.privatechat",
+            "certificate_hash": "3f84cce2f34ba327cf57736ece5b8a356e2448d8"
+          }
+        },
+        {
+          "client_id": "1095174593519-p10dhe2epdquipaudq25316rkq392smd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBF5rafS2Lhbk06-hzRAlp1jo8PuwNVHn0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1095174593519-p10dhe2epdquipaudq25316rkq392smd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
