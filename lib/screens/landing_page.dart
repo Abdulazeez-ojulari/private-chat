@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:privatechat/screens/chat_screen.dart';
 import 'package:privatechat/screens/home_page.dart';
 import 'package:privatechat/screens/sign_in_page.dart';
 import 'package:privatechat/services.dart/auth.dart';
@@ -21,7 +22,7 @@ class LandingPage extends StatelessWidget {
       return SignInPage.create(context);
     }
     //TODO : Kiran attach the chatpage here
-    return const HomePage(
+    return const ChatScreen(
      
     );
   }
