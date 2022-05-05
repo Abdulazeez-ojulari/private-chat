@@ -14,7 +14,7 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.only(top: 10),
-        child: BottomNavigationBar(items: [
+        child: BottomNavigationBar(items: const [
           BottomNavigationBarItem(
             label: '',
             icon: FaIcon(FontAwesomeIcons.solidMessage),
@@ -64,9 +64,46 @@ class _ChatScreenState extends State<ChatScreen> {
             IconButton(
                 onPressed: null,
                 icon: Icon(Icons.video_call, color: Colors.pinkAccent)),
-            IconButton(
-                onPressed: null,
-                icon: Icon(Icons.more_vert, color: Colors.pinkAccent)),
+            PopupMenuButton(
+              elevation: 5,
+              child: Center(
+                  child: Icon(
+                Icons.more_vert,
+                color: Colors.pinkAccent,
+              )),
+              itemBuilder: (context) {
+                return [
+                  PopupMenuItem(
+                    child: TextButton(
+                      onPressed: null,
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.person_add,
+                            color: Colors.green,
+                          ),
+                          Text('  Add friend'),
+                        ],
+                      ),
+                    ),
+                  ),
+                  PopupMenuItem(
+                    child: TextButton(
+                      onPressed: null,
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.report_problem,
+                            color: Colors.red,
+                          ),
+                          Text('  Report User'),
+                        ],
+                      ),
+                    ),
+                  ),
+                ];
+              },
+            ),
           ]),
       body: SafeArea(
         child: Column(
@@ -131,11 +168,6 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                   ],
                 ),
-                // Stack(
-                //   children: [
-                //     VoiceMessage(audioSrc: '', me: true),
-                //   ],
-                // ),
               ],
             ),
             Stack(
