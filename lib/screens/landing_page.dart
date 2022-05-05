@@ -22,9 +22,7 @@ class LandingPage extends StatelessWidget {
       return SignInPage.create(context);
     }
     //TODO : Kiran attach the chatpage here
-    return const ChatScreen(
-     
-    );
+    return const ChatScreen();
   }
   return const Scaffold(
     backgroundColor: Colors.white,
