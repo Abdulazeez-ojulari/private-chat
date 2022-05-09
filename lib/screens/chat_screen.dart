@@ -1,5 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:privatechat/models/user.dart';
+import 'package:privatechat/services.dart/auth.dart';
+import 'package:privatechat/services.dart/database.dart';
+import 'package:privatechat/services.dart/firestore.dart';
+import 'package:provider/provider.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({Key? key}) : super(key: key);
@@ -9,8 +15,11 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  final _fireStore = FirebaseFirestore.instance;
   @override
   Widget build(BuildContext context) {
+    final db = Provider.of<DataBase>(context, listen: false);
+    final auth = Provider.of<AuthBase>(context, listen: false);
     return Scaffold(
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.only(top: 10),
@@ -89,7 +98,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                   PopupMenuItem(
                     child: TextButton(
-                      onPressed: null,
+                      onPressed: () => auth.signOut(),
                       child: Row(
                         children: [
                           Icon(
@@ -105,146 +114,45 @@ class _ChatScreenState extends State<ChatScreen> {
               },
             ),
           ]),
-      body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            ListView(
-              shrinkWrap: true,
-              padding: EdgeInsets.all(10),
-              children: [
-                Stack(
-                  alignment: Alignment.bottomLeft,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 20.0),
-                      child: Container(
-                        height: 235,
-                        width: 194,
-                        child: Image(
-                          image: AssetImage('images/Rectangle 26.png'),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                      decoration: BoxDecoration(
-                        color: Color(0xffFF647C),
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20.0),
-                          bottomRight: Radius.circular(20.0),
-                          topRight: Radius.circular(20.0),
-                        ),
-                      ),
-                      child: Text(
-                        'They are great',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Stack(
-                  alignment: Alignment.topRight,
-                  children: [
-                    Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20.0),
-                          bottomLeft: Radius.circular(20.0),
-                          topRight: Radius.circular(20.0),
-                        ),
-                        color: Color(0xffFF647C),
-                      ),
-                      child: Text(
-                        'Really where',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            Stack(
-              children: [
-                Container(
-                  padding: EdgeInsets.only(left: 10, bottom: 10, top: 10),
-                  decoration: BoxDecoration(
-                    color: Color(0xffF5F5F5),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(50),
-                    ),
-                  ),
-                  height: 60,
-                  width: double.infinity,
-                  child: Row(
+      body: StreamBuilder<List<UserModel>>(
+        stream: db.usersStream(),
+        builder: (context, snapshot) {
+         
+          if (snapshot.hasData) {
+            final list = snapshot.data;
+            final userList = <UserModel>[];
+            // for (var item in list!.docs) {
+            //    var list  = UserModel.fromMap(item.reference , '');
+            //    userList.add(list);
+            // }
+           print(list);
+            print(auth.currentUser!.email);
+
+            return ListView.builder(
+                itemCount: list!.length,
+                itemBuilder: (context, index) {
+                  return Column(
                     children: [
-                      FloatingActionButton(
-                        elevation: 0,
-                        backgroundColor: Colors.transparent,
-                        onPressed: () {},
-                        child: Icon(
-                          Icons.camera_alt,
-                          color: Colors.black,
-                          size: 20,
-                        ),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Expanded(
-                        child: TextField(
-                          decoration: InputDecoration(
-                              hintText: 'Type something',
-                              hintStyle: TextStyle(color: Colors.black54),
-                              border: InputBorder.none),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      FloatingActionButton(
-                        onPressed: () {},
-                        child: Icon(
-                          Icons.mic_rounded,
-                          color: Colors.black,
-                          size: 20,
-                        ),
-                        backgroundColor: Colors.transparent,
-                        elevation: 0,
-                      ),
-                      FloatingActionButton(
-                        onPressed: () {},
-                        child: Icon(
-                          Icons.photo_rounded,
-                          color: Colors.black,
-                          size: 20,
-                        ),
-                        backgroundColor: Colors.transparent,
-                        elevation: 0,
-                      ),
-                      FloatingActionButton(
-                        onPressed: () {},
-                        child: Icon(
-                          Icons.send_rounded,
-                          color: Color(0xffFF647C),
-                          size: 20,
-                        ),
-                        backgroundColor: Colors.transparent,
-                        elevation: 0,
+                      Text(
+                        auth.currentUser!.uid != list[index].id
+                            ? list[index].name
+                            : 'NoUser',
+                        style: TextStyle(color: Colors.black),
                       ),
                     ],
-                  ),
+                  );
+                });
+          } else if (snapshot.hasError) {
+            Column(
+              children: [
+                Center(
+                  child: Text('Error'),
                 ),
               ],
-            ),
-          ],
-        ),
+            );
+          }
+          return CircularProgressIndicator();
+        },
       ),
     );
   }

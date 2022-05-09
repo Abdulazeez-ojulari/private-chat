@@ -19,9 +19,16 @@ class SignInController with ChangeNotifier {
       return await signInMethod();
     } catch (e) {
       _setIsLoading(false);
-      // isLoading.value = false;
       rethrow;
     }
+  }
+
+  bool isCurrentUser(){
+    if (auth.currentUser?.uid == null) {
+      return false;
+    }
+    return true;
+    
   }
 
   
