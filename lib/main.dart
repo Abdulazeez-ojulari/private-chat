@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:privatechat/screens/home_page.dart';
 import 'package:privatechat/screens/landing_page.dart';
 import 'package:privatechat/services.dart/auth.dart';
 import 'package:provider/provider.dart';
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const LandingPage(),
+        home: HomePage(),
       ),
     );
   }
