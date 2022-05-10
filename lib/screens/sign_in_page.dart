@@ -76,6 +76,8 @@ class SignInPage extends StatelessWidget {
                             )),
                         onPressed: () {
                           controller.signInWithGoogle();
+
+                          
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
