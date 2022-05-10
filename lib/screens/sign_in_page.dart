@@ -34,40 +34,33 @@ class SignInPage extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              isLoading
-                  ? const Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : Expanded(
-                      child: Center(
-                        child: Container(
-                          color: Colors.black54,
-                          height: 150,
-                          width: 150,
-                        ),
-                      ),
-                    ),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      'Private.Chat',
-                      style: GoogleFonts.poppins(
-                        fontSize: 30,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
+                    isLoading
+                        ? const Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : Text(
+                            'Private.Chat',
+                            style: GoogleFonts.poppins(
+                              fontSize: 30,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
                     SizedBox(height: 12),
                     Text(
                       'But I must explain to you how all this mistaken idea of.',
                       style: GoogleFonts.poppins(
                         fontSize: 13,
                       ),
+                      textAlign: TextAlign.center,
                     ),
                     SizedBox(
                       height: 100,
@@ -82,7 +75,7 @@ class SignInPage extends StatelessWidget {
                                   BorderRadius.all(Radius.circular(22.5)),
                             )),
                         onPressed: () {
-                          // controller.signInWithGoogle();
+                          controller.signInWithGoogle();
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,

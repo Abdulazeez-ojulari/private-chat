@@ -23,11 +23,12 @@ class MyApp extends StatelessWidget {
     return Provider<AuthBase>(
       create: (_) => Auth(),
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Private.Chat',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: HomePage(),
+        home: LandingPage(),
       ),
     );
   }

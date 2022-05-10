@@ -26,88 +26,91 @@ class HomePage extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: Container(
-        color: Colors.white,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Container(
-              height: 500,
-              alignment: Alignment.center,
-              child: Image(
-                image: AssetImage('images/Layer_2.png'),
+      resizeToAvoidBottomInset: true,
+      body: SafeArea(
+        child: Container(
+          color: Colors.white,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                height: 500,
+                alignment: Alignment.center,
+                child: const Image(
+                  image: AssetImage('images/Layer_2.png'),
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    primary: const Color(0xffff647c),
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(22.5)),
-                    )),
-                onPressed: () {
-                  //TODO: Screen to take user to.
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      primary: const Color(0xffff647c),
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(22.5)),
+                      )),
+                  onPressed: () {
+                    //TODO: Screen to take user to.
+                  },
+                  child: Row(
+                    children: [
+                      const Padding(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                        child: FaIcon(
+                          FontAwesomeIcons.solidComments,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 45.0),
+                        child: Text(
+                          'Start Chatting',
+                          style: GoogleFonts.poppins(
+                              fontSize: 20, fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 27,
+              ),
+              GestureDetector(
+                onTap: () {
+                  //Show modalBottomSheet of Preference settings.
+                  showModalBottomSheet(
+                      backgroundColor: Colors.transparent,
+                      isScrollControlled: true,
+                      isDismissible: true,
+                      enableDrag: true,
+                      context: context,
+                      builder: (context) {
+                        return PreferenceWidget();
+                      });
                 },
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                      child: FaIcon(
-                        FontAwesomeIcons.solidComments,
+                    Text(
+                      'Search preferences',
+                      style: GoogleFonts.poppins(
+                        fontSize: 12,
+                        color: const Color(0xffff647c),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 45.0),
-                      child: Text(
-                        'Start Chatting',
-                        style: GoogleFonts.poppins(
-                            fontSize: 20, fontWeight: FontWeight.w600),
-                      ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    const FaIcon(
+                      FontAwesomeIcons.sliders,
+                      size: 10,
+                      color: const Color(0xffff647c),
                     ),
                   ],
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 27,
-            ),
-            GestureDetector(
-              onTap: () {
-                //Show modalBottomSheet of Preference settings.
-                showModalBottomSheet(
-                    backgroundColor: Colors.transparent,
-                    isScrollControlled: true,
-                    isDismissible: true,
-                    enableDrag: true,
-                    context: context,
-                    builder: (context) {
-                      return PreferenceWidget();
-                    });
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Search preferences',
-                    style: GoogleFonts.poppins(
-                      fontSize: 12,
-                      color: Color(0xffff647c),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  FaIcon(
-                    FontAwesomeIcons.sliders,
-                    size: 10,
-                    color: Color(0xffff647c),
-                  ),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

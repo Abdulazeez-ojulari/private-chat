@@ -4,6 +4,14 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class ChatScreen extends StatefulWidget {
   const ChatScreen({Key? key}) : super(key: key);
 
+  static Future<void> show(BuildContext context) {
+    return Navigator.of(context, rootNavigator: true).push(
+      MaterialPageRoute(
+        builder: (context) => const ChatScreen(),
+      ),
+    );
+  }
+
   @override
   State<ChatScreen> createState() => _ChatScreenState();
 }
@@ -12,47 +20,34 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.only(top: 10),
-        child: BottomNavigationBar(items: const [
-          BottomNavigationBarItem(
-            label: '',
-            icon: FaIcon(FontAwesomeIcons.solidMessage),
-          ),
-          BottomNavigationBarItem(
-            label: '',
-            icon: FaIcon(FontAwesomeIcons.commentDots),
-          ),
-          BottomNavigationBarItem(
-              label: '', icon: FaIcon(FontAwesomeIcons.user)),
-        ]),
-      ),
       appBar: AppBar(
           backgroundColor: Colors.white,
-          elevation: 5.0,
-          title: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CircleAvatar(
-                backgroundColor: Colors.transparent,
-                child: Image(
-                  image: AssetImage('images/avatar.png'),
+          elevation: 0.0,
+          leading: GestureDetector(
+            onTap: () {
+              Navigator.of(context).pop();
+            },
+            child: Row(
+              children: [
+                Icon(
+                  Icons.arrow_back_ios_new_rounded,
+                  size: 16,
+                  color: Colors.pinkAccent,
                 ),
-              ),
-              SizedBox(
-                width: 5,
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Anonymous  #2354',
-                    style: TextStyle(fontSize: 15.0, color: Colors.black),
+                CircleAvatar(
+                  backgroundColor: Colors.transparent,
+                  child: Image(
+                    height: 30,
+                    width: 30,
+                    image: AssetImage('images/avatar.png'),
                   ),
-                ],
-              ),
-            ],
+                ),
+              ],
+            ),
+          ),
+          title: Text(
+            'Anonymous  #2354',
+            style: TextStyle(fontSize: 14.0, color: Colors.black),
           ),
           actions: [
             IconButton(
@@ -63,7 +58,10 @@ class _ChatScreenState extends State<ChatScreen> {
                 )),
             IconButton(
                 onPressed: null,
-                icon: Icon(Icons.video_call, color: Colors.pinkAccent)),
+                icon: Icon(
+                  Icons.video_call,
+                  color: Colors.pinkAccent,
+                )),
             PopupMenuButton(
               elevation: 5,
               child: Center(
@@ -184,9 +182,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   width: double.infinity,
                   child: Row(
                     children: [
-                      FloatingActionButton(
-                        elevation: 0,
-                        backgroundColor: Colors.transparent,
+                      TextButton(
                         onPressed: () {},
                         child: Icon(
                           Icons.camera_alt,
@@ -208,35 +204,29 @@ class _ChatScreenState extends State<ChatScreen> {
                       SizedBox(
                         width: 10,
                       ),
-                      FloatingActionButton(
+                      TextButton(
                         onPressed: () {},
                         child: Icon(
                           Icons.mic_rounded,
                           color: Colors.black,
                           size: 20,
                         ),
-                        backgroundColor: Colors.transparent,
-                        elevation: 0,
                       ),
-                      FloatingActionButton(
+                      TextButton(
                         onPressed: () {},
                         child: Icon(
                           Icons.photo_rounded,
                           color: Colors.black,
                           size: 20,
                         ),
-                        backgroundColor: Colors.transparent,
-                        elevation: 0,
                       ),
-                      FloatingActionButton(
+                      TextButton(
                         onPressed: () {},
                         child: Icon(
                           Icons.send_rounded,
                           color: Color(0xffFF647C),
                           size: 20,
                         ),
-                        backgroundColor: Colors.transparent,
-                        elevation: 0,
                       ),
                     ],
                   ),
