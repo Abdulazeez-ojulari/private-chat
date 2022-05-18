@@ -15,8 +15,6 @@ class LandingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final auth = Provider.of<AuthBase>(context, listen: false);
     return StreamBuilder<User?>(
-
-  
         stream: auth.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.active) {
@@ -26,10 +24,10 @@ class LandingPage extends StatelessWidget {
               return SignInPage.create(context);
             }
             //  auth.signOut();
-            //TODO : Kiran attach the chatpage here
+         
             return Provider<DataBase>(
                 create: (_) => FirestorDatabase(user.uid),
-                child: const ChatScreen());
+                child: const NewHomePage());
           }
           return const Scaffold(
             backgroundColor: Colors.white,

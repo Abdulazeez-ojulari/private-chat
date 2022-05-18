@@ -17,4 +17,6 @@ class BottomNavItemData {
       icon: Icons.person_outline_rounded,
     ),
   };
+
+ 
 }

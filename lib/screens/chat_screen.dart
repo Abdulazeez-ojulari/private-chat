@@ -1,19 +1,21 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import 'package:privatechat/models/user.dart';
 import 'package:privatechat/services.dart/auth.dart';
 import 'package:privatechat/services.dart/database.dart';
-import 'package:privatechat/services.dart/firestore.dart';
+
 import 'package:provider/provider.dart';
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({Key? key}) : super(key: key);
+  const ChatScreen({Key? key, required this.db}) : super(key: key);
+  final DataBase db;
 
-  static Future<void> show(BuildContext context) {
-    return Navigator.of(context, rootNavigator: true).push(
+  static Future<void> show(BuildContext context, DataBase db) {
+    return Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => const ChatScreen(),
+        builder: (context) => ChatScreen(
+          db: db,
+        ),
       ),
     );
   }
@@ -23,10 +25,8 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  final _fireStore = FirebaseFirestore.instance;
   @override
   Widget build(BuildContext context) {
-    final db = Provider.of<DataBase>(context, listen: false);
     final auth = Provider.of<AuthBase>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
@@ -37,7 +37,7 @@ class _ChatScreenState extends State<ChatScreen> {
               Navigator.of(context).pop();
             },
             child: Row(
-              children: [
+              children: const [
                 Icon(
                   Icons.arrow_back_ios_new_rounded,
                   size: 16,
@@ -54,18 +54,18 @@ class _ChatScreenState extends State<ChatScreen> {
               ],
             ),
           ),
-          title: Text(
+          title: const Text(
             'Anonymous  #2354',
             style: TextStyle(fontSize: 14.0, color: Colors.black),
           ),
           actions: [
-            IconButton(
+            const IconButton(
                 onPressed: null,
                 icon: Icon(
                   Icons.call,
                   color: Colors.pinkAccent,
                 )),
-            IconButton(
+            const IconButton(
                 onPressed: null,
                 icon: Icon(
                   Icons.video_call,
@@ -73,7 +73,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 )),
             PopupMenuButton(
               elevation: 5,
-              child: Center(
+              child: const Center(
                   child: Icon(
                 Icons.more_vert,
                 color: Colors.pinkAccent,
@@ -84,7 +84,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     child: TextButton(
                       onPressed: null,
                       child: Row(
-                        children: [
+                        children: const [
                           Icon(
                             Icons.person_add,
                             color: Colors.green,
@@ -99,11 +99,11 @@ class _ChatScreenState extends State<ChatScreen> {
                       onPressed: () => auth.signOut(),
                       child: Row(
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.report_problem,
                             color: Colors.red,
                           ),
-                          Text('  Report User'),
+                          const Text('  Report User'),
                         ],
                       ),
                     ),
@@ -113,18 +113,10 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           ]),
       body: StreamBuilder<List<UserModel>>(
-        stream: db.usersStream(),
+        stream: widget.db.usersStream(),
         builder: (context, snapshot) {
-         
           if (snapshot.hasData) {
             final list = snapshot.data;
-            final userList = <UserModel>[];
-            // for (var item in list!.docs) {
-            //    var list  = UserModel.fromMap(item.reference , '');
-            //    userList.add(list);
-            // }
-           print(list);
-            print(auth.currentUser!.email);
 
             return ListView.builder(
                 itemCount: list!.length,
@@ -135,22 +127,65 @@ class _ChatScreenState extends State<ChatScreen> {
                         auth.currentUser!.uid != list[index].id
                             ? list[index].name
                             : 'NoUser',
-                        style: TextStyle(color: Colors.black),
+                        style: const TextStyle(color: Colors.black),
                       ),
                     ],
                   );
                 });
           } else if (snapshot.hasError) {
             Column(
-              children: [
+              children: const [
                 Center(
                   child: Text('Error'),
                 ),
               ],
             );
           }
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         },
+      ),
+      bottomSheet: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 15),
+        child: SizedBox(
+          width: double.infinity,
+          height: 70,
+          child: Theme(
+            data: Theme.of(context).copyWith(
+              colorScheme: ThemeData().colorScheme.copyWith(
+                    primary: Colors.black,
+                  ),
+            ),
+            child: TextField(
+              textInputAction: TextInputAction.newline,
+              maxLines: null,
+              expands: true,
+              decoration: InputDecoration(
+                  contentPadding: EdgeInsets.all(2),
+                  iconColor: Colors.black,
+                  suffixIconColor: Colors.black,
+                  prefixIconColor: Colors.black,
+                  fillColor: const Color(0xfff5f5f5),
+                  filled: true,
+                  prefixIcon: IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.photo_camera_rounded)),
+                  suffixIcon: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(onPressed: () {}, icon: const Icon(Icons.mic)),
+                      IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Icons.photo_outlined)),
+                      IconButton(
+                          onPressed: () {}, icon: const Icon(Icons.send)),
+                    ],
+                  ),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25),
+                      borderSide: BorderSide.none)),
+            ),
+          ),
+        ),
       ),
     );
   }

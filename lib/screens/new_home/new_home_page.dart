@@ -49,7 +49,7 @@ class _NewHomePageState extends State<NewHomePage> {
         navigatorKeys: navigatorKeys,
         currentTab: _currentTab,
         onSelectTab: _select,
-        widgetBuilders: widgetBuilders,
+        screenBuilders: widgetBuilders,
       ),
     );
   }

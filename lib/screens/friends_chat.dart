@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:privatechat/screens/chat_screen.dart';
+import 'package:privatechat/services.dart/database.dart';
 import 'package:privatechat/widgets/message_list_item.dart';
+import 'package:provider/provider.dart';
 
 class FriendsChat extends StatelessWidget {
   const FriendsChat({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final db = Provider.of<DataBase>(context, listen: false);
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -24,7 +27,7 @@ class FriendsChat extends StatelessWidget {
                         return _topBar();
                       }
                       return MessageListItem(
-                        onTap: () => ChatScreen.show(context),
+                        onTap: () => ChatScreen.show(context, db),
                         friendName: 'friendName',
                         friendMessagePreview: 'friendMessagePreview',
                       );
