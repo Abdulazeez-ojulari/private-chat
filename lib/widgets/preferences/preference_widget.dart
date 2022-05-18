@@ -207,9 +207,7 @@ class _PreferenceWidgetState extends State<PreferenceWidget> {
               height: 5,
             ),
             partners_sexuality(height: height, width: width),
-            SizedBox(
-              height: height / 11,
-            ),
+            SizedBox(height: 30),
             SizedBox(
               height: height / 20,
               width: width / 2.35,
@@ -235,9 +233,6 @@ class _PreferenceWidgetState extends State<PreferenceWidget> {
                 ),
               ),
             ),
-            const SizedBox(
-              height: 15,
-            )
           ],
         ),
       ),

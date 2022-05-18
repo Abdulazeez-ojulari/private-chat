@@ -79,6 +79,7 @@ class HomePage extends StatelessWidget {
                 onTap: () {
                   //Show modalBottomSheet of Preference settings.
                   showModalBottomSheet(
+                      useRootNavigator: true,
                       backgroundColor: Colors.transparent,
                       isScrollControlled: true,
                       isDismissible: true,
