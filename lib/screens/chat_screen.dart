@@ -96,7 +96,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                   PopupMenuItem(
                     child: TextButton(
-                      onPressed: () => auth.signOut(),
+                      onPressed: () {},
                       child: Row(
                         children: [
                           const Icon(
