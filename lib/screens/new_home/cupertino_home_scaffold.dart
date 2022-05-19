@@ -23,9 +23,7 @@ class CupertinoHomeScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoTabScaffold(
-      backgroundColor: Provider.of<ThemeNotifier>(context).darkTheme
-          ? Color(0xff201F24)
-          : Colors.white,
+      backgroundColor: Colors.white,
       tabBuilder: (context, index) {
         final item = BottomNavItem.values[index];
         return CupertinoTabView(
@@ -34,8 +32,16 @@ class CupertinoHomeScaffold extends StatelessWidget {
         );
       },
       tabBar: CupertinoTabBar(
+        inactiveColor: Provider.of<ThemeNotifier>(context).darkTheme
+            ? Colors.white
+            : const Color(0xff707070),
+        shadowColor: Provider.of<ThemeNotifier>(context).darkTheme
+            ? const Color(0xff000000)
+            : const Color(0x45000000),
         height: 70,
-        backgroundColor: const Color(0xffffffff),
+        backgroundColor: Provider.of<ThemeNotifier>(context).darkTheme
+            ? const Color(0xff201f24)
+            : const Color(0xffffffff),
         activeColor: const Color(0xfffe9aab),
         items: [
           _buildItem(BottomNavItem.chatExplore),

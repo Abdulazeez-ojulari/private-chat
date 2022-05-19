@@ -5,9 +5,12 @@ import 'package:privatechat/utils/themeNotifier.dart';
 
 class SubTile extends StatefulWidget {
   final String title;
+  final void Function(bool) onToggle;
+  final bool value;
   const SubTile({
     Key? key,
     required this.title,
+    required this.onToggle, required this.value,
   }) : super(key: key);
 
   @override
@@ -40,29 +43,29 @@ class _SubTileState extends State<SubTile> {
             SizedBox(
               height: 10,
             ),
-            FlutterSwitch(
-              activeColor: Color(0xffFE9AAB),
-              inactiveColor: Provider.of<ThemeNotifier>(context).darkTheme
-                  ? Color(0xff201F24)
-                  : Colors.white,
-              inactiveToggleColor: Color(0xffFE9AAB),
-              switchBorder: Border.all(color: Color(0xffFE9AAB)),
-              width: 35.0,
-              height: 20.0,
-              toggleSize: 10.0,
-              value: status,
-              borderRadius: 20.0,
-              onToggle: (val) {
-                setState(() {
-                  status = val;
-                });
-              },
+           FlutterSwitch(
+                  activeColor: Color(0xffFE9AAB),
+                  inactiveColor: Provider.of<ThemeNotifier>(context).darkTheme
+                      ? Color(0xff201F24)
+                      : Colors.white,
+                  inactiveToggleColor:  Provider.of<ThemeNotifier>(context).darkTheme
+                      ? Colors.white
+                      : Color(0xffFE9AAB),
+                  switchBorder: Border.all(color: Color(0xffFE9AAB)),
+                  width: 35.0,
+                  height: 20.0,
+                  toggleSize: 10.0,
+                  value: widget.value,
+                  borderRadius: 20.0,
+                  onToggle: (val) => widget.onToggle(val),
+            )]
+              
             ),
             // IconButton(onPressed: (){
             // },icon: Icon(widget.iconData,color: Color(0xffFE9AAB),size: 35,),)
           ]),
-        ],
-      ),
-    );
+        
+      );
+    
   }
 }

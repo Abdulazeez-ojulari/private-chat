@@ -21,7 +21,7 @@ class CupertinoTabBar extends StatelessWidget implements PreferredSizeWidget {
     this.currentIndex = 0,
     this.backgroundColor,
     this.activeColor,
-    this.inactiveColor = _kDefaultTabBarInactiveColor,
+    required this.inactiveColor,
     this.iconSize = 30.0,
     this.height = _kTabBarHeight,
     this.border = const Border(
@@ -29,7 +29,7 @@ class CupertinoTabBar extends StatelessWidget implements PreferredSizeWidget {
         color: _kDefaultTabBarBorderColor,
         width: 0.0, // 0.0 means one physical pixel
       ),
-    ),
+    ), required this.shadowColor,
   })  : assert(items != null),
         assert(
           items.length >= 2,
@@ -51,7 +51,9 @@ class CupertinoTabBar extends StatelessWidget implements PreferredSizeWidget {
 
   final Color? activeColor;
 
-  final Color inactiveColor;
+  final Color shadowColor;
+
+  final Color? inactiveColor;
 
   final double iconSize;
 
@@ -65,10 +67,7 @@ class CupertinoTabBar extends StatelessWidget implements PreferredSizeWidget {
   /// Indicates whether the tab bar is fully opaque or can have contents behind
   /// it show through it.
   bool opaque(BuildContext context) {
-    final Color backgroundColor =
-        this.backgroundColor ?? CupertinoTheme.of(context).barBackgroundColor;
-    return CupertinoDynamicColor.resolve(backgroundColor, context).alpha ==
-        0xFF;
+    return false;
   }
 
   @override
@@ -82,13 +81,13 @@ class CupertinoTabBar extends StatelessWidget implements PreferredSizeWidget {
     );
 
     final Color inactive =
-        CupertinoDynamicColor.resolve(inactiveColor, context);
+        CupertinoDynamicColor.resolve(inactiveColor!, context);
     Widget result = Container(
       decoration: BoxDecoration(
         //border: resolvedBorder,
-        boxShadow: const [
+        boxShadow:  [
           BoxShadow(
-              color: Color(0x21000000),
+              color: shadowColor,
               offset: Offset(0, 4),
               blurRadius: 20,
               spreadRadius: 3)
@@ -123,15 +122,15 @@ class CupertinoTabBar extends StatelessWidget implements PreferredSizeWidget {
       ),
     );
 
-    if (!opaque(context)) {
-      // For non-opaque backgrounds, apply a blur effect.
-      result = ClipRect(
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-          child: result,
-        ),
-      );
-    }
+    // if (opaque(context)) {
+    //   // For non-opaque backgrounds, apply a blur effect.
+    //   result = ClipRect(
+    //     child: BackdropFilter(
+    //       filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+    //       child: result,
+    //     ),
+    //   );
+    // }
 
     return result;
   }
@@ -230,6 +229,7 @@ class CupertinoTabBar extends StatelessWidget implements PreferredSizeWidget {
       border: border ?? this.border,
       currentIndex: currentIndex ?? this.currentIndex,
       onTap: onTap ?? this.onTap,
+      shadowColor: shadowColor,
     );
   }
 }

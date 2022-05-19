@@ -13,28 +13,27 @@ class FriendsChat extends StatelessWidget {
     final db = Provider.of<DataBase>(context, listen: false);
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Expanded(
-                child: ListView.builder(
-                    physics: BouncingScrollPhysics(),
-                    itemCount: 20 + 1,
-                    itemBuilder: (context, index) {
-                      if (index == 0) {
-                        return _topBar();
-                      }
-                      return MessageListItem(
-                        onTap: () => ChatScreen.show(context, db),
-                        friendName: 'friendName',
-                        friendMessagePreview: 'friendMessagePreview',
-                      );
-                    }),
-              )
-            ],
-          ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Expanded(
+              child: ListView.builder(
+                  padding:
+                      const EdgeInsets.only(left: 8.0, right: 8.0, top: 10),
+                  physics: BouncingScrollPhysics(),
+                  itemCount: 20 + 1,
+                  itemBuilder: (context, index) {
+                    if (index == 0) {
+                      return _topBar();
+                    }
+                    return MessageListItem(
+                      onTap: () => ChatScreen.show(context, db),
+                      friendName: 'friendName',
+                      friendMessagePreview: 'friendMessagePreview',
+                    );
+                  }),
+            )
+          ],
         ),
       ),
     );
@@ -48,7 +47,7 @@ class FriendsChat extends StatelessWidget {
           children: [
             // Your Friends
             Text("Your Friends",
-                style: TextStyle(fontSize: 32, fontWeight: FontWeight.w500),
+                style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.left),
             const Spacer(),
             IconButton(

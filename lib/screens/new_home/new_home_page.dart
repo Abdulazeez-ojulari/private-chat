@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:privatechat/screens/chat_screen.dart';
 import 'package:privatechat/screens/friends_chat.dart';
 import 'package:privatechat/screens/home_page.dart';
 import 'package:privatechat/screens/profile/profile_page.dart';

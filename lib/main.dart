@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
         Provider<DataBase>(
           create: (_) => FirestorDatabase(''),
         ),
-        ChangeNotifierProvider<ThemeNotifier>(
+        ListenableProvider<ThemeNotifier>(
           create: (_) => ThemeNotifier(),
         )
       ],
@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'Private.Chat',
           theme: Provider.of<ThemeNotifier>(context).darkTheme ? dark : light,
-          home: NewHomePage(),
+          home: LandingPage(),
         );
       },
     );

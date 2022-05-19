@@ -12,7 +12,7 @@ class ChatScreen extends StatefulWidget {
   final DataBase db;
 
   static Future<void> show(BuildContext context, DataBase db) {
-    return Navigator.of(context).push(
+    return Navigator.of(context, rootNavigator: true).push(
       MaterialPageRoute(
         builder: (context) => ChatScreen(
           db: db,
@@ -99,7 +99,9 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                   PopupMenuItem(
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        auth.signOut();
+                      },
                       child: Row(
                         children: [
                           const Icon(
@@ -127,7 +129,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   return Column(
                     children: [
                       Text(
-                        auth.currentUser!.uid != list[index].id
+                        auth.currentUser?.uid != list[index].id
                             ? list[index].name
                             : 'NoUser',
                       ),

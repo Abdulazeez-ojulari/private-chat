@@ -26,6 +26,11 @@ class ThemeNotifier extends ChangeNotifier {
   final String key = "theme";
 
   bool darkTheme = false;
+  bool status1 = false;
+  bool status2 = false;
+  bool status3 = false;
+  bool status4 = false;
+  bool status5 = false;
 
   //Getter
 
@@ -33,9 +38,14 @@ class ThemeNotifier extends ChangeNotifier {
     darkTheme = true;
   }
 
-  toggleTheme() {
-    darkTheme = !darkTheme;
+  updateStatus2(val) {
+    status2 = val;
+    notifyListeners();
+  }
 
+  toggleTheme(val) {
+    darkTheme = !darkTheme;
+    updateStatus2(val);
     notifyListeners();
   }
 }
