@@ -23,10 +23,12 @@ class CupertinoHomeScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoTabScaffold(
+      // restorationId: 'root',
       backgroundColor: Colors.white,
       tabBuilder: (context, index) {
         final item = BottomNavItem.values[index];
         return CupertinoTabView(
+          restorationScopeId: 'root',
           navigatorKey: navigatorKeys[item],
           builder: (context) => screenBuilders[item]!(context),
         );

@@ -45,7 +45,7 @@ class _SubTileState extends State<SubTile> {
             ),
            FlutterSwitch(
                   activeColor: Color(0xffFE9AAB),
-                  inactiveColor: Provider.of<ThemeNotifier>(context).darkTheme
+                  inactiveColor:Provider.of<ThemeNotifier>(context).darkTheme
                       ? Color(0xff201F24)
                       : Colors.white,
                   inactiveToggleColor:  Provider.of<ThemeNotifier>(context).darkTheme
@@ -58,14 +58,13 @@ class _SubTileState extends State<SubTile> {
                   value: widget.value,
                   borderRadius: 20.0,
                   onToggle: (val) => widget.onToggle(val),
-            )]
-              
-            ),
+            ) ]
+          )]
+            )
             // IconButton(onPressed: (){
             // },icon: Icon(widget.iconData,color: Color(0xffFE9AAB),size: 35,),)
-          ]),
-        
-      );
-    
+      
+    );    
+   
   }
 }

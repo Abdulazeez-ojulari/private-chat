@@ -14,11 +14,13 @@ class NewHomePage extends StatefulWidget {
 }
 
 class _NewHomePageState extends State<NewHomePage> {
-  BottomNavItem _currentTab = BottomNavItem.chatExplore;
+  BottomNavItem _currentTab = BottomNavItem.profile;
+
+  final RestorableInt _index = RestorableInt(0);
 
   void _select(BottomNavItem tabItem) {
     if (tabItem == _currentTab) {
-      navigatorKeys[tabItem]!.currentState!.popUntil((route) => route.isFirst);
+      // navigatorKeys[tabItem]!.currentState!.popUntil((route) => route.isFirst);
     } else {
       setState(() {
         _currentTab = tabItem;

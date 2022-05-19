@@ -5,9 +5,16 @@ import 'package:privatechat/screens/profile/sub_tile.dart';
 import 'package:privatechat/utils/themeNotifier.dart';
 import 'package:provider/provider.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  final CupertinoTabController? controller = CupertinoTabController();
+  bool status = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -178,18 +185,21 @@ class ProfilePage extends StatelessWidget {
                   context,
                 ).status1,
               ),
+             
               SubTile(
                 title: 'Dark mode',
                 value: Provider.of<ThemeNotifier>(
-                  context,
+                  context, 
                 ).status2,
-                onToggle: (val) =>
-                    Provider.of<ThemeNotifier>(context, listen: false)
-                        .toggleTheme(val),
+                onToggle: (val) { Provider.of<ThemeNotifier>(
+                  context, listen: false
+                ).toggleTheme(val);
+                
+                }
               ),
               SubTile(
                 value: Provider.of<ThemeNotifier>(
-                  context,
+                  context, 
                 ).status3,
                 title: "Phone Vibration",
                 onToggle: (val) {},
@@ -198,14 +208,14 @@ class ProfilePage extends StatelessWidget {
                 title: "Notification",
                 onToggle: (val) {},
                 value: Provider.of<ThemeNotifier>(
-                  context,
+                  context, 
                 ).status4,
               ),
               SubTile(
                 title: "Show Online",
                 onToggle: (val) {},
                 value: Provider.of<ThemeNotifier>(
-                  context,
+                  context, 
                 ).status5,
               ),
             ],
