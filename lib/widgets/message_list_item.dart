@@ -45,27 +45,18 @@ class MessageListItem extends StatelessWidget {
       ),
       title: Text(
         friendName,
-        style: GoogleFonts.poppins(
-            color: const Color(0xff201f24),
-            fontWeight: FontWeight.w600,
-            fontSize: 15),
+        style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
         textAlign: TextAlign.left,
       ),
       subtitle: Text(
         friendMessagePreview,
-        style: GoogleFonts.poppins(
-            color: const Color(0xff201f24),
-            fontWeight: FontWeight.w500,
-            fontSize: 14),
+        style: Theme.of(context).textTheme.titleSmall,
         textAlign: TextAlign.left,
       ),
       trailing: Text(
         messageTime?.day.toString() ?? 'Now',
         textAlign: TextAlign.left,
-        style: GoogleFonts.poppins(
-            color: const Color(0xff201f24),
-            fontWeight: FontWeight.w600,
-            fontSize: 15),
+        style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 15),
       ),
     );
   }

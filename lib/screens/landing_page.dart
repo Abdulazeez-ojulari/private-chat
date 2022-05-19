@@ -24,18 +24,16 @@ class LandingPage extends StatelessWidget {
               return SignInPage.create(context);
             }
             //  auth.signOut();
-         
+
             return Provider<DataBase>(
                 create: (_) => FirestorDatabase(user.uid),
                 child: const NewHomePage());
           }
           return const Scaffold(
-            backgroundColor: Colors.white,
             body: Center(
               child: CircularProgressIndicator(),
             ),
           );
         });
-
   }
 }

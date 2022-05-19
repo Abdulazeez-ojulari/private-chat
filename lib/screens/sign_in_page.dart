@@ -29,7 +29,6 @@ class SignInPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffffffff),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -76,8 +75,6 @@ class SignInPage extends StatelessWidget {
                             )),
                         onPressed: () {
                           controller.signInWithGoogle();
-
-                          
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,

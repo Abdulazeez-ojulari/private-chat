@@ -6,6 +6,8 @@ import 'package:privatechat/widgets/preferences/preferenceScreenButtons.dart';
 import 'package:privatechat/widgets/preferences/countries_list.dart';
 import 'package:privatechat/widgets/preferences/partners_sexuality.dart';
 import 'package:privatechat/widgets/preferences/partners_gender.dart';
+import 'package:provider/provider.dart';
+import 'package:privatechat/utils/themeNotifier.dart';
 
 class PreferenceWidget extends StatefulWidget {
   @override
@@ -18,18 +20,20 @@ class _PreferenceWidgetState extends State<PreferenceWidget> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    return Container(
-      padding: EdgeInsets.all(10),
-      height: height * 0.85,
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        height: height * 0.85,
+        decoration: BoxDecoration(
+          color: Provider.of<ThemeNotifier>(context).darkTheme
+              ? Color(0xff201F24)
+              : Colors.white,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
         ),
-      ),
-      child: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [

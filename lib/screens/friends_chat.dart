@@ -48,10 +48,7 @@ class FriendsChat extends StatelessWidget {
           children: [
             // Your Friends
             Text("Your Friends",
-                style: GoogleFonts.poppins(
-                    color: const Color(0xff201f24),
-                    fontSize: 32,
-                    fontWeight: FontWeight.w500),
+                style: TextStyle(fontSize: 32, fontWeight: FontWeight.w500),
                 textAlign: TextAlign.left),
             const Spacer(),
             IconButton(
@@ -67,36 +64,40 @@ class FriendsChat extends StatelessWidget {
         ),
         TextField(
           decoration: InputDecoration(
-              fillColor: const Color(0xffdedede),
-              filled: true,
-              prefixIcon: const Icon(
-                Icons.search_rounded,
-                size: 30,
+            fillColor: const Color(0xffdedede),
+            filled: true,
+            prefixIcon: const Icon(
+              Icons.search_rounded,
+              size: 30,
+            ),
+            hintText: 'Type something...',
+            hintStyle: GoogleFonts.poppins(
+                color: const Color(0xff6d6d6d), fontSize: 14),
+            focusedBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.transparent, width: 0),
+              borderRadius: BorderRadius.all(
+                Radius.circular(23.5),
               ),
-              hintText: 'Type something...',
-              hintStyle: GoogleFonts.poppins(
-                  color: const Color(0xff6d6d6d), fontSize: 14),
-              focusedBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.transparent, width: 0),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(23.5),
-                ),
+            ),
+            enabledBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.transparent, width: 0),
+              borderRadius: BorderRadius.all(
+                Radius.circular(23.5),
               ),
-              enabledBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.transparent, width: 0),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(23.5),
-                ),
+            ),
+            disabledBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.transparent, width: 0),
+              borderRadius: BorderRadius.all(
+                Radius.circular(23.5),
               ),
-              disabledBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.transparent, width: 0),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(23.5),
-                ),
+            ),
+            border: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(23.5),
               ),
-              border: const OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(23.5)))),
-        )
+            ),
+          ),
+        ),
       ],
     );
   }

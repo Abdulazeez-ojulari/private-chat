@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:privatechat/models/user.dart';
 import 'package:privatechat/services.dart/auth.dart';
 import 'package:privatechat/services.dart/database.dart';
+import 'package:privatechat/utils/themeNotifier.dart';
 
 import 'package:provider/provider.dart';
 
@@ -30,7 +31,9 @@ class _ChatScreenState extends State<ChatScreen> {
     final auth = Provider.of<AuthBase>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: Provider.of<ThemeNotifier>(context).darkTheme
+              ? Color(0xff201F24)
+              : Color(0xfff1f1f1),
           elevation: 0.0,
           leading: GestureDetector(
             onTap: () {
@@ -56,7 +59,7 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
           title: const Text(
             'Anonymous  #2354',
-            style: TextStyle(fontSize: 14.0, color: Colors.black),
+            style: TextStyle(fontSize: 14.0),
           ),
           actions: [
             const IconButton(
@@ -127,7 +130,6 @@ class _ChatScreenState extends State<ChatScreen> {
                         auth.currentUser!.uid != list[index].id
                             ? list[index].name
                             : 'NoUser',
-                        style: const TextStyle(color: Colors.black),
                       ),
                     ],
                   );
@@ -164,7 +166,9 @@ class _ChatScreenState extends State<ChatScreen> {
                   iconColor: Colors.black,
                   suffixIconColor: Colors.black,
                   prefixIconColor: Colors.black,
-                  fillColor: const Color(0xfff5f5f5),
+                  fillColor: Provider.of<ThemeNotifier>(context).darkTheme
+                      ? Color(0xff3D393A)
+                      : Color(0xffF5F5F5),
                   filled: true,
                   prefixIcon: IconButton(
                       onPressed: () {},

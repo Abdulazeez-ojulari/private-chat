@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:privatechat/screens/friends_chat.dart';
 import 'package:privatechat/screens/home_page.dart';
-import 'package:privatechat/screens/profile_page.dart';
+import 'package:privatechat/screens/profile/profile_page.dart';
 import 'package:privatechat/utils/bottom_nav_item.dart';
-
 import 'cupertino_home_scaffold.dart';
 
 class NewHomePage extends StatefulWidget {

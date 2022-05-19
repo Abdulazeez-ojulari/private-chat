@@ -3,7 +3,8 @@ import './custom_cupertino_tab_scaffold.dart';
 import 'package:flutter/cupertino.dart'
     hide CupertinoTabBar, CupertinoTabScaffold;
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
+import 'package:privatechat/utils/themeNotifier.dart';
 import 'package:privatechat/utils/bottom_nav_item.dart';
 
 class CupertinoHomeScaffold extends StatelessWidget {
@@ -22,6 +23,9 @@ class CupertinoHomeScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoTabScaffold(
+      backgroundColor: Provider.of<ThemeNotifier>(context).darkTheme
+          ? Color(0xff201F24)
+          : Colors.white,
       tabBuilder: (context, index) {
         final item = BottomNavItem.values[index];
         return CupertinoTabView(
