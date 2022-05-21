@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:privatechat/services.dart/auth.dart';
 import 'package:provider/provider.dart';
 import 'package:privatechat/widgets/preferences/preference_widget.dart';
-import 'package:privatechat/utils/themeNotifier.dart';
+import 'package:privatechat/controllers/themeNotifier.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -29,6 +29,9 @@ class HomePage extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
       resizeToAvoidBottomInset: true,
+      backgroundColor: Provider.of<ThemeNotifier>(context).darkTheme
+            ? const Color(0xff201F24)
+            : const Color(0xfff1f1f1),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

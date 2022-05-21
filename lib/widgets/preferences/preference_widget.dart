@@ -7,7 +7,7 @@ import 'package:privatechat/widgets/preferences/countries_list.dart';
 import 'package:privatechat/widgets/preferences/partners_sexuality.dart';
 import 'package:privatechat/widgets/preferences/partners_gender.dart';
 import 'package:provider/provider.dart';
-import 'package:privatechat/utils/themeNotifier.dart';
+import 'package:privatechat/controllers/themeNotifier.dart';
 
 class PreferenceWidget extends StatefulWidget {
   @override
@@ -60,13 +60,18 @@ class _PreferenceWidgetState extends State<PreferenceWidget> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 DropdownButtonHideUnderline(
+                  
                   child: DropdownButton2<dynamic>(
+                    
                     style: GoogleFonts.poppins(
                       color: Color(0xffFE9AAB),
                     ),
                     buttonPadding: EdgeInsets.only(left: 20),
                     dropdownMaxHeight: height * 0.3,
                     dropdownDecoration: BoxDecoration(
+                      color: Provider.of<ThemeNotifier>(context).darkTheme
+            ? Color(0xff201F24)
+            : Color(0xfff1f1f1),
                       border: Border.all(
                         width: 2,
                         color: Color(0xffFE9AAB),

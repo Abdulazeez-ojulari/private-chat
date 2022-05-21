@@ -1,6 +1,6 @@
 //Handle CRUD operations in this file
 
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:privatechat/models/user.dart';
 import 'package:privatechat/services.dart/api_path.dart';

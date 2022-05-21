@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:privatechat/screens/chat_screen.dart';
 import 'package:privatechat/screens/friends_chat.dart';
 import 'package:privatechat/screens/home_page.dart';
 import 'package:privatechat/screens/profile/profile_page.dart';
@@ -16,11 +15,9 @@ class NewHomePage extends StatefulWidget {
 class _NewHomePageState extends State<NewHomePage> {
   BottomNavItem _currentTab = BottomNavItem.profile;
 
-  final RestorableInt _index = RestorableInt(0);
-
   void _select(BottomNavItem tabItem) {
     if (tabItem == _currentTab) {
-      // navigatorKeys[tabItem]!.currentState!.popUntil((route) => route.isFirst);
+      navigatorKeys[tabItem]!.currentState?.popUntil((route) => route.isFirst);
     } else {
       setState(() {
         _currentTab = tabItem;

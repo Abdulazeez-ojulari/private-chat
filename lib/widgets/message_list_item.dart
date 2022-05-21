@@ -8,13 +8,14 @@ class MessageListItem extends StatelessWidget {
       required this.friendName,
       required this.friendMessagePreview,
       this.messageTime,
-      required this.onTap})
+      required this.onTap, required this.textColor})
       : super(key: key);
   final String? friendImage;
   final String friendName;
   final String friendMessagePreview;
   final DateTime? messageTime;
   final VoidCallback onTap;
+  final Color textColor;
 
   @override
   Widget build(BuildContext context) {
@@ -45,18 +46,18 @@ class MessageListItem extends StatelessWidget {
       ),
       title: Text(
         friendName,
-        style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
+        style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15, color: textColor),
         textAlign: TextAlign.left,
       ),
       subtitle: Text(
         friendMessagePreview,
-        style: Theme.of(context).textTheme.titleSmall,
+        style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14, color: textColor),
         textAlign: TextAlign.left,
       ),
       trailing: Text(
         messageTime?.day.toString() ?? 'Now',
         textAlign: TextAlign.left,
-        style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 15),
+        style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 15, color: textColor),
       ),
     );
   }

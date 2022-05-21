@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:privatechat/screens/chat_screen.dart';
 import 'package:privatechat/services.dart/database.dart';
+import 'package:privatechat/controllers/themeNotifier.dart';
 import 'package:privatechat/widgets/message_list_item.dart';
 import 'package:provider/provider.dart';
 
@@ -10,8 +11,10 @@ class FriendsChat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final darkTheme = Provider.of<ThemeNotifier>(context).darkTheme; 
     final db = Provider.of<DataBase>(context, listen: false);
     return Scaffold(
+      backgroundColor: darkTheme ? const Color(0xff201f24) : Colors.white,
       body: SafeArea(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -20,16 +23,17 @@ class FriendsChat extends StatelessWidget {
               child: ListView.builder(
                   padding:
                       const EdgeInsets.only(left: 8.0, right: 8.0, top: 10),
-                  physics: BouncingScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   itemCount: 20 + 1,
                   itemBuilder: (context, index) {
                     if (index == 0) {
-                      return _topBar();
+                      return _topBar(darkTheme);
                     }
                     return MessageListItem(
                       onTap: () => ChatScreen.show(context, db),
                       friendName: 'friendName',
                       friendMessagePreview: 'friendMessagePreview',
+                      textColor: darkTheme ? Colors.white : Colors.black,
                     );
                   }),
             )
@@ -39,7 +43,7 @@ class FriendsChat extends StatelessWidget {
     );
   }
 
-  Widget _topBar() {
+  Widget _topBar(darkTheme) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -47,7 +51,7 @@ class FriendsChat extends StatelessWidget {
           children: [
             // Your Friends
             Text("Your Friends",
-                style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: darkTheme ? Colors.white : Colors.black),
                 textAlign: TextAlign.left),
             const Spacer(),
             IconButton(

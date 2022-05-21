@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:privatechat/models/user.dart';
 import 'package:privatechat/services.dart/auth.dart';
 import 'package:privatechat/services.dart/database.dart';
-import 'package:privatechat/utils/themeNotifier.dart';
+import 'package:privatechat/controllers/themeNotifier.dart';
 
 import 'package:provider/provider.dart';
 
@@ -26,151 +26,195 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  final key = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<AuthBase>(context, listen: false);
-    return Scaffold(
-      appBar: AppBar(
-          backgroundColor: Provider.of<ThemeNotifier>(context).darkTheme
-              ? Color(0xff201F24)
-              : Color(0xfff1f1f1),
-          elevation: 0.0,
-          leading: GestureDetector(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: Row(
-              children: const [
-                Icon(
-                  Icons.arrow_back_ios_new_rounded,
-                  size: 16,
-                  color: Colors.pinkAccent,
-                ),
-                CircleAvatar(
-                  backgroundColor: Colors.transparent,
-                  child: Image(
-                    height: 30,
-                    width: 30,
-                    image: AssetImage('images/avatar.png'),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          title: const Text(
-            'Anonymous  #2354',
-            style: TextStyle(fontSize: 14.0),
-          ),
-          actions: [
-            const IconButton(
-                onPressed: null,
-                icon: Icon(
-                  Icons.call,
-                  color: Colors.pinkAccent,
-                )),
-            const IconButton(
-                onPressed: null,
-                icon: Icon(
-                  Icons.video_call,
-                  color: Colors.pinkAccent,
-                )),
-            PopupMenuButton(
-              elevation: 5,
-              child: const Center(
-                  child: Icon(
-                Icons.more_vert,
-                color: Colors.pinkAccent,
-              )),
-              itemBuilder: (context) {
-                return [
-                  PopupMenuItem(
-                    child: TextButton(
-                      onPressed: null,
-                      child: Row(
-                        children: const [
-                          Icon(
-                            Icons.person_add,
-                            color: Colors.green,
-                          ),
-                          Text('  Add friend'),
-                        ],
-                      ),
-                    ),
-                  ),
-                  PopupMenuItem(
-                    child: TextButton(
-                      onPressed: () {
-                        auth.signOut();
-                      },
-                      child: Row(
-                        children: [
-                          const Icon(
-                            Icons.report_problem,
-                            color: Colors.red,
-                          ),
-                          const Text('  Report User'),
-                        ],
-                      ),
-                    ),
-                  ),
-                ];
+    return Theme(
+      data: Theme.of(context).copyWith(
+          colorScheme: ThemeData().colorScheme.copyWith(
+                primary: Colors.black,
+              ),
+          bottomSheetTheme: BottomSheetThemeData(
+            backgroundColor: Provider.of<ThemeNotifier>(context).darkTheme
+                ? const Color(0xff201F24)
+                : const Color(0xfff1f1f1),
+            modalBackgroundColor: Provider.of<ThemeNotifier>(context).darkTheme
+                ? const Color(0xff201F24)
+                : const Color(0xfff1f1f1),
+          )),
+      child: Scaffold(
+        key: key,
+        resizeToAvoidBottomInset: true,
+        backgroundColor: Provider.of<ThemeNotifier>(context).darkTheme
+            ? const Color(0xff201F24)
+            : const Color(0xfff1f1f1),
+        appBar: AppBar(
+            backgroundColor: Provider.of<ThemeNotifier>(context).darkTheme
+                ? const Color(0xff201F24)
+                : const Color(0xfff1f1f1),
+            elevation: 0.0,
+            leading: GestureDetector(
+              onTap: () {
+                Navigator.of(context).pop();
               },
-            ),
-          ]),
-      body: StreamBuilder<List<UserModel>>(
-        stream: widget.db.usersStream(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            final list = snapshot.data;
-
-            return ListView.builder(
-                itemCount: list!.length,
-                itemBuilder: (context, index) {
-                  return Column(
-                    children: [
-                      Text(
-                        auth.currentUser?.uid != list[index].id
-                            ? list[index].name
-                            : 'NoUser',
-                      ),
-                    ],
-                  );
-                });
-          } else if (snapshot.hasError) {
-            Column(
-              children: const [
-                Center(
-                  child: Text('Error'),
-                ),
-              ],
-            );
-          }
-          return const CircularProgressIndicator();
-        },
-      ),
-      bottomSheet: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 15),
-        child: SizedBox(
-          width: double.infinity,
-          height: 70,
-          child: Theme(
-            data: Theme.of(context).copyWith(
-              colorScheme: ThemeData().colorScheme.copyWith(
-                    primary: Colors.black,
+              child: Row(
+                children: const [
+                  Icon(
+                    Icons.arrow_back_ios_new_rounded,
+                    size: 16,
+                    color: Colors.pinkAccent,
                   ),
+                  CircleAvatar(
+                    backgroundColor: Colors.transparent,
+                    child: Image(
+                      height: 30,
+                      width: 30,
+                      image: AssetImage('images/avatar.png'),
+                    ),
+                  ),
+                ],
+              ),
             ),
+            title: Text(
+              'Anonymous  #2354',
+              style: TextStyle(
+                fontSize: 14.0,
+                color: Provider.of<ThemeNotifier>(context).darkTheme
+                    ? Colors.white
+                    : Colors.black,
+              ),
+            ),
+            actions: [
+              const IconButton(
+                  onPressed: null,
+                  icon: Icon(
+                    Icons.call,
+                    color: Colors.pinkAccent,
+                  )),
+              const IconButton(
+                  onPressed: null,
+                  icon: Icon(
+                    Icons.video_call,
+                    color: Colors.pinkAccent,
+                  )),
+              PopupMenuButton(
+                elevation: 5,
+                color: Provider.of<ThemeNotifier>(context).darkTheme
+                    ? const Color(0xff201F24)
+                    : const Color(0xfff1f1f1),
+                child: const Center(
+                    child: Icon(
+                  Icons.more_vert,
+                  color: Colors.pinkAccent,
+                )),
+                itemBuilder: (context) {
+                  return [
+                    PopupMenuItem(
+                      child: TextButton(
+                        onPressed: null,
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.person_add,
+                              color: Colors.green,
+                            ),
+                            Text(
+                              '  Add friend',
+                              style: TextStyle(
+                                color: Provider.of<ThemeNotifier>(context,
+                                            listen: false)
+                                        .darkTheme
+                                    ? Colors.white
+                                    : Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    PopupMenuItem(
+                      child: TextButton(
+                        onPressed: () {
+                          auth.signOut();
+                        },
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.report_problem,
+                              color: Colors.red,
+                            ),
+                            Text(
+                              '  Report User',
+                              style: TextStyle(
+                                color: Provider.of<ThemeNotifier>(context,
+                                            listen: false)
+                                        .darkTheme
+                                    ? Colors.white
+                                    : Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ];
+                },
+              ),
+            ]),
+        body: StreamBuilder<List<UserModel>>(
+          stream: widget.db.usersStream(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              final list = snapshot.data;
+
+              return ListView.builder(
+                  itemCount: list!.length,
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+                        Text(
+                          auth.currentUser?.uid != list[index].id
+                              ? list[index].name
+                              : 'NoUser',
+                          style: TextStyle(
+                              color:
+                                  Provider.of<ThemeNotifier>(context).darkTheme
+                                      ? Colors.white
+                                      : Colors.black),
+                        ),
+                      ],
+                    );
+                  });
+            } else if (snapshot.hasError) {
+              Column(
+                children: const [
+                  Center(
+                    child: Text('Error'),
+                  ),
+                ],
+              );
+            }
+            return const CircularProgressIndicator();
+          },
+        ),
+        bottomSheet: SizedBox(
+          height: 70,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10),
             child: TextField(
               textInputAction: TextInputAction.newline,
               maxLines: null,
               expands: true,
               decoration: InputDecoration(
-                  contentPadding: EdgeInsets.all(2),
+                  contentPadding: const EdgeInsets.all(2),
                   iconColor: Colors.black,
                   suffixIconColor: Colors.black,
                   prefixIconColor: Colors.black,
                   fillColor: Provider.of<ThemeNotifier>(context).darkTheme
-                      ? Color(0xff3D393A)
-                      : Color(0xffF5F5F5),
+                      ? const Color(0xff3D393A)
+                      : const Color(0xffF5F5F5),
                   filled: true,
                   prefixIcon: IconButton(
                       onPressed: () {},

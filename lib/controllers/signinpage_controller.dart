@@ -3,15 +3,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:privatechat/services.dart/auth.dart';
 
 class SignInController with ChangeNotifier {
-  SignInController( {required this.auth,  this.isLoading = false,});
+  SignInController({
+    required this.auth,
+    this.isLoading = false,
+  });
   final AuthBase auth;
   bool isLoading;
 
-  void _setIsLoading(bool _isLoading){
+  void _setIsLoading(bool _isLoading) {
     isLoading = _isLoading;
     notifyListeners();
   }
-  
+
   Future<User?> _signIn(
       {required Future<User?> Function() signInMethod}) async {
     try {
@@ -23,17 +26,13 @@ class SignInController with ChangeNotifier {
     }
   }
 
-  bool isCurrentUser(){
+  bool isCurrentUser() {
     if (auth.currentUser?.uid == null) {
       return false;
     }
     return true;
-    
   }
 
-  
   Future<User?> signInWithGoogle() async =>
       await _signIn(signInMethod: auth.signInWithGoogle);
-
-
 }

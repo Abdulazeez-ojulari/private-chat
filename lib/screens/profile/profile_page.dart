@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:privatechat/screens/profile/sub_tile.dart';
-import 'package:privatechat/utils/themeNotifier.dart';
+import 'package:privatechat/controllers/themeNotifier.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -15,9 +15,12 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   final CupertinoTabController? controller = CupertinoTabController();
   bool status = false;
+  
   @override
   Widget build(BuildContext context) {
+    final darkTheme = Provider.of<ThemeNotifier>(context).darkTheme ;
     return Scaffold(
+      backgroundColor: darkTheme ? Color(0xff201f24) : Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 8, vertical: 10),
@@ -27,7 +30,7 @@ class _ProfilePageState extends State<ProfilePage> {
             children: [
               Text(
                 "Profile",
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: darkTheme ? Colors.white : Colors.black),
               ),
               SizedBox(
                 height: 10,
@@ -48,7 +51,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: Text(
                     "Anonymous #2353",
-                    style: TextStyle(fontSize: 12),
+                    style: TextStyle(fontSize: 12, color: darkTheme ? Colors.white : Colors.black),
                   ),
                 ),
                 subtitle: Row(
@@ -56,7 +59,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     Container(
                       width: 20,
                       height: 20,
-                      color: Colors.white,
+                    color: darkTheme ? Colors.white : Colors.black,
                     ),
                     SizedBox(
                       width: 7,
@@ -64,7 +67,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     Container(
                       width: 20,
                       height: 20,
-                      color: Colors.white,
+                      color: darkTheme ? Colors.white : Colors.black,
                     ),
                     SizedBox(
                       width: 7,
@@ -72,7 +75,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     Container(
                       width: 20,
                       height: 20,
-                      color: Colors.white,
+                      color: darkTheme ? Colors.white : Colors.black,
                     ),
                     SizedBox(
                       width: 7,
@@ -80,7 +83,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     Container(
                       width: 20,
                       height: 20,
-                      color: Colors.white,
+                      color: darkTheme ? Colors.white : Colors.black,
                     )
                   ],
                 ),
@@ -98,7 +101,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: [
                   Text("About me",
                       style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: darkTheme ? Colors.white : Colors.black)),
                   IconButton(
                       onPressed: () {},
                       icon: Icon(
@@ -123,7 +126,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: [
                   Text("Location",
                       style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: darkTheme ? Colors.white : Colors.black)),
                   IconButton(
                       onPressed: () {},
                       icon: Icon(
@@ -144,7 +147,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 height: 10,
               ),
               Text("Gender",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: darkTheme ? Colors.white : Colors.black)),
               SizedBox(
                 height: 10,
               ),
@@ -157,7 +160,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 height: 10,
               ),
               Text("Sexuality",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: darkTheme ? Colors.white : Colors.black)),
               SizedBox(
                 height: 10,
               ),
@@ -170,7 +173,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 height: 30,
               ),
               Text("Subscription",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: darkTheme ? Colors.white : Colors.black)),
               SizedBox(
                 height: 15,
               ),
@@ -193,7 +196,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ).status2,
                 onToggle: (val) { Provider.of<ThemeNotifier>(
                   context, listen: false
-                ).toggleTheme(val);
+                ).darkTheme = val;
                 
                 }
               ),
