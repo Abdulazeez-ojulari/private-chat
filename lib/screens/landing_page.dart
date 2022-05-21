@@ -16,48 +16,42 @@ class LandingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   
-
-        return MultiProvider(
-          providers: [
-            Provider<AuthBase>(
-              create: (_) => Auth(),
-            ),
-            Provider<DataBase>(
-              create: (_) => FirestorDatabase(''),
-            ),
-            ChangeNotifierProvider<ThemeNotifier>(
-              create: (_) => ThemeNotifier(),
-            )
-          ],
-          builder: (context, widget) {
-             final auth = Provider.of<AuthBase>(context, listen: false);
-            return StreamBuilder<User?>(
-              stream: auth.authStateChanges(),
-              builder: (context, snapshot) {
-                     if (snapshot.connectionState == ConnectionState.active) {
+    return MultiProvider(
+      providers: [
+        Provider<AuthBase>(
+          create: (_) => Auth(),
+        ),
+        Provider<DataBase>(
+          create: (_) => FirestorDatabase(''),
+        ),
+        ChangeNotifierProvider<ThemeNotifier>(
+          create: (_) => ThemeNotifier(),
+        )
+      ],
+      builder: (context, widget) {
+        final auth = Provider.of<AuthBase>(context, listen: false);
+        return StreamBuilder<User?>(
+            stream: auth.authStateChanges(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.active) {
                 final user = snapshot.data;
                 return MaterialApp(
                   debugShowCheckedModeBanner: false,
                   title: 'Private.Chat',
-                  theme: Provider.of<ThemeNotifier>(context).darkTheme ? dark : light,
-                  home: user == null ? SignInPage.create(context) : NewHomePage(),
-          
+                  theme: Provider.of<ThemeNotifier>(context).darkTheme
+                      ? dark
+                      : light,
+                  home:
+                      user == null ? SignInPage.create(context) : NewHomePage(),
                 );
-                }
-    return const MaterialApp(
-        title: 'Private.Chat',
-        home: Scaffold(
-          body: Center(child: CircularProgressIndicator()),
-        ));
               }
-            );
-          },
-        );
-      }
-  
-      
-    
-   
+              return const MaterialApp(
+                  title: 'Private.Chat',
+                  home: Scaffold(
+                    body: Center(child: CircularProgressIndicator()),
+                  ));
+            });
+      },
+    );
   }
-
+}
