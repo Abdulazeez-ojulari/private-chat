@@ -4,7 +4,7 @@ import 'package:privatechat/models/user.dart';
 import 'package:privatechat/services.dart/auth.dart';
 import 'package:privatechat/services.dart/database.dart';
 import 'package:privatechat/controllers/themeNotifier.dart';
-
+import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:provider/provider.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -26,7 +26,29 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  Future<void> secureScreen() async {
+    await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+  }
+
+  Future<void> clearSecureScreen() async {
+    await FlutterWindowManager.clearFlags(FlutterWindowManager.FLAG_SECURE);
+  }
+
   final key = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    secureScreen();
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    clearSecureScreen();
+    // TODO: implement dispose
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
