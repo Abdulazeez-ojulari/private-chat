@@ -1,18 +1,21 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:privatechat/models/message.dart';
+import 'package:privatechat/widgets/last_message_container.dart';
 
 class MessageListItem extends StatelessWidget {
   const MessageListItem(
       {Key? key,
       this.friendImage,
       required this.friendName,
-      required this.friendMessagePreview,
+      required this.stream,
       this.messageTime,
       required this.onTap, required this.textColor})
       : super(key: key);
   final String? friendImage;
   final String friendName;
-  final String friendMessagePreview;
+  final Stream<List<Message>> stream;
   final DateTime? messageTime;
   final VoidCallback onTap;
   final Color textColor;
@@ -49,11 +52,7 @@ class MessageListItem extends StatelessWidget {
         style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15, color: textColor),
         textAlign: TextAlign.left,
       ),
-      subtitle: Text(
-        friendMessagePreview,
-        style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14, color: textColor),
-        textAlign: TextAlign.left,
-      ),
+      subtitle: LastMessage(stream: stream),
       trailing: Text(
         messageTime?.day.toString() ?? 'Now',
         textAlign: TextAlign.left,

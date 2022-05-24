@@ -70,7 +70,7 @@ class _FriendsChatState extends State<FriendsChat> {
                         snapshot: snapshot,
                         itemBuilder: (context, userModel) => MessageListItem(
                               friendName: userModel.name,
-                              friendMessagePreview: userModel.email,
+                              stream: db.messagesStream(auth.currentUser!.uid, userModel.id),
                               friendImage: userModel.photoUrl,
                               onTap: () =>
                                   ChatScreen.show(context, db, userModel),
