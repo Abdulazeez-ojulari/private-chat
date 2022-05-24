@@ -14,34 +14,38 @@ class PreferenceWidget extends StatefulWidget {
   State<PreferenceWidget> createState() => _PreferenceWidgetState();
 }
 
+bool isDropDownExpanded = false;
+
 class _PreferenceWidgetState extends State<PreferenceWidget> {
   String dropDownValue = 'India';
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    return SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
-      child: Container(
-        padding: const EdgeInsets.all(10),
-        height: height * 0.85,
-        decoration: BoxDecoration(
-          color: Provider.of<ThemeNotifier>(context).darkTheme
-              ? Color(0xff201F24)
-              : Colors.white,
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
-          ),
+    return Container(
+      padding: const EdgeInsets.all(10),
+      height: height * 0.85,
+      decoration: BoxDecoration(
+        color: Provider.of<ThemeNotifier>(context).darkTheme
+            ? Color(0xff201F24)
+            : Color(0xfff1f1f1),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
         ),
+      ),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        physics: const ClampingScrollPhysics(),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
               'Choose the country you want',
               style: GoogleFonts.poppins(
                 fontSize: 20,
-                color: Color(0xffFE9AAB),
+                color: const Color(0xffFE9AAB),
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -49,7 +53,7 @@ class _PreferenceWidgetState extends State<PreferenceWidget> {
               'to search your partner in',
               style: GoogleFonts.poppins(
                 fontSize: 20,
-                color: Color(0xffFE9AAB),
+                color: const Color(0xffFE9AAB),
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -60,23 +64,26 @@ class _PreferenceWidgetState extends State<PreferenceWidget> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 DropdownButtonHideUnderline(
-                  
                   child: DropdownButton2<dynamic>(
-                    
+                    onMenuStateChange: (isOpen) {
+                      setState(() {
+                        isDropDownExpanded = !isDropDownExpanded;
+                      });
+                    },
                     style: GoogleFonts.poppins(
-                      color: Color(0xffFE9AAB),
+                      color: const Color(0xffFE9AAB),
                     ),
-                    buttonPadding: EdgeInsets.only(left: 20),
+                    buttonPadding: const EdgeInsets.only(left: 20),
                     dropdownMaxHeight: height * 0.3,
                     dropdownDecoration: BoxDecoration(
                       color: Provider.of<ThemeNotifier>(context).darkTheme
-            ? Color(0xff201F24)
-            : Color(0xfff1f1f1),
+                          ? Color(0xff201F24)
+                          : Color(0xfff1f1f1),
                       border: Border.all(
                         width: 2,
-                        color: Color(0xffFE9AAB),
+                        color: const Color(0xffFE9AAB),
                       ),
-                      borderRadius: BorderRadius.all(
+                      borderRadius: const BorderRadius.all(
                         Radius.circular(20),
                       ),
                     ),
@@ -85,7 +92,7 @@ class _PreferenceWidgetState extends State<PreferenceWidget> {
                         width: 2,
                         color: Color(0xffFE9AAB),
                       ),
-                      borderRadius: BorderRadius.all(
+                      borderRadius: const BorderRadius.all(
                         Radius.circular(20),
                       ),
                     ),
@@ -106,11 +113,11 @@ class _PreferenceWidgetState extends State<PreferenceWidget> {
                     buttonHeight: height * 0.045,
                     buttonWidth: 200,
                     itemHeight: height * 0.045,
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.keyboard_arrow_down,
                       color: Color(0xffFE9AAB),
                     ),
-                    iconOnClick: Icon(
+                    iconOnClick: const Icon(
                       Icons.keyboard_arrow_up,
                       color: Color(0xffFE9AAB),
                     ),
@@ -127,7 +134,7 @@ class _PreferenceWidgetState extends State<PreferenceWidget> {
                       width: 2.5,
                       color: const Color(0xffFE9AAB),
                     ),
-                    borderRadius: BorderRadius.all(
+                    borderRadius: const BorderRadius.all(
                       Radius.circular(20.0),
                     ),
                   ),
@@ -137,11 +144,11 @@ class _PreferenceWidgetState extends State<PreferenceWidget> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.gps_fixed,
                             color: const Color(0xffFF647C),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 5,
                           ),
                           Text(
@@ -158,7 +165,12 @@ class _PreferenceWidgetState extends State<PreferenceWidget> {
                 ),
               ],
             ),
-            SizedBox(
+            isDropDownExpanded
+                ? SizedBox(
+                    height: height * 0.3,
+                  )
+                : Container(),
+            const SizedBox(
               height: 35,
             ),
             Row(
@@ -184,23 +196,23 @@ class _PreferenceWidgetState extends State<PreferenceWidget> {
                     height: height, width: width, text: 'Memes')
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 35,
             ),
             Text(
               'Choose Partner\'s Gender',
               style: GoogleFonts.poppins(
                   fontSize: 20,
-                  color: Color(
+                  color: const Color(
                     0xffFE9AAB,
                   ),
                   fontWeight: FontWeight.w500),
             ),
-            SizedBox(
+            const SizedBox(
               height: 35,
             ),
             Partners_gender(height: height, width: width),
-            SizedBox(
+            const SizedBox(
               height: 40,
             ),
             Text(
@@ -212,11 +224,11 @@ class _PreferenceWidgetState extends State<PreferenceWidget> {
                   ),
                   fontWeight: FontWeight.w500),
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             partners_sexuality(height: height, width: width),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             SizedBox(
               height: height / 20,
               width: width / 2.35,

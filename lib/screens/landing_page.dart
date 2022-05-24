@@ -11,9 +11,8 @@ import 'package:provider/provider.dart';
 
 class LandingPage extends StatelessWidget {
   const LandingPage({
-    Key? key, 
+    Key? key,
   }) : super(key: key);
- 
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +31,11 @@ class LandingPage extends StatelessWidget {
                 create: (_) => FirestorDatabase(user.uid),
                 child: const NewHomePage());
           }
-          return const Scaffold(
-            body: Center(
+          return Scaffold(
+            backgroundColor: Provider.of<ThemeNotifier>(context).darkTheme
+                ? Colors.white
+                : Colors.black,
+            body: const Center(
               child: CircularProgressIndicator(),
             ),
           );
