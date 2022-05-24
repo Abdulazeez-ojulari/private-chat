@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
+import 'screens/new_home/new_home_page.dart';
 import 'package:privatechat/screens/landing_page.dart';
 import 'package:privatechat/services.dart/auth.dart';
 import 'package:privatechat/controllers/themeNotifier.dart';
@@ -11,22 +11,20 @@ import 'firebase_options.dart';
 
 final themeChangeProvider = ThemeNotifier();
 Future<void> getCurrentAppTheme() async {
-    themeChangeProvider.status2 = await themeChangeProvider.darkThemePreference.getButtonStatus();
-   themeChangeProvider.darkTheme =
-        await themeChangeProvider.darkThemePreference.getTheme();
-      
-  }
+  themeChangeProvider.status2 =
+      await themeChangeProvider.darkThemePreference.getButtonStatus();
+  themeChangeProvider.darkTheme =
+      await themeChangeProvider.darkThemePreference.getTheme();
+}
 
 Future<void> main() async {
- 
   WidgetsFlutterBinding.ensureInitialized();
-  
- 
- await getCurrentAppTheme();
+
+  await getCurrentAppTheme();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  
+
   runApp(const MyApp());
 }
 
@@ -40,20 +38,16 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
-
   @override
   void initState() {
     super.initState();
-   getCurrentAppTheme();
+    getCurrentAppTheme();
   }
 
-  
-
   @override
-  Widget build(BuildContext context)   {
+  Widget build(BuildContext context) {
     getCurrentAppTheme();
-    
+
     return MultiProvider(
         providers: [
           ChangeNotifierProvider<ThemeNotifier>(
