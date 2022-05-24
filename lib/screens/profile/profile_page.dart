@@ -119,6 +119,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         showModalBottomSheet(
                             enableDrag: true,
                             isDismissible: true,
+                            useRootNavigator: true,
                             backgroundColor: Colors.transparent,
                             context: context,
                             builder: (context) {
@@ -127,8 +128,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                     MediaQuery.of(context).size.height * 0.3,
                                 padding: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
-                                  color:
-                                      Theme.of(context).scaffoldBackgroundColor,
+                                  color: darkTheme
+                                      ? Color(0xff201F24)
+                                      : Color(0xfff1f1f1),
                                   borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(10),
                                     topRight: Radius.circular(10),
