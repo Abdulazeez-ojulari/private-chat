@@ -52,19 +52,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final controller = ScrollController();
   double position = 0;
 
-  @override
-  void initState() {
-    super.initState();
-
-    if (controller.hasClients) {
-      controller.animateTo(
-        controller.position.maxScrollExtent,
-        curve: Curves.easeOut,
-        duration: const Duration(milliseconds: 500),
-      );
-    }
-  }
-
+ 
   sendMessage() {
     final text = textEditingController.text.trim();
 
@@ -85,7 +73,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     secureScreen();
-    // TODO: implement initState
+
     super.initState();
   }
 
