@@ -13,7 +13,7 @@ class UserModel{
   factory UserModel.fromMap(Map<String, dynamic>? data, String documentId){
     final name = data?['name'] ?? '';
     final email = data?['email'] ?? '';
-    final photoUrl = data?['photoURl'] ?? '';
+    final photoUrl = data?['photoURL'] ?? '';
     final createdAt = data?['createdAt'].toString() ?? '';
     final chattingWith = data?['chattingWith'].toString() ?? '';
     return UserModel(

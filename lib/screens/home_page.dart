@@ -10,7 +10,6 @@ import 'package:privatechat/controllers/themeNotifier.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
-  
 
   Future<void> _signOut(BuildContext context) async {
     final auth = Provider.of<AuthBase>(context, listen: false);
@@ -30,90 +29,92 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: Provider.of<ThemeNotifier>(context).darkTheme
-            ? const Color(0xff201F24)
-            : const Color(0xfff1f1f1),
+          ? const Color(0xff201F24)
+          : const Color(0xfff1f1f1),
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Container(
-              height: 500,
-              alignment: Alignment.center,
-              child: const Image(
-                image: AssetImage('images/Layer_2.png'),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                height: 500,
+                alignment: Alignment.center,
+                child: const Image(
+                  image: AssetImage('images/Layer_2.png'),
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    primary: const Color(0xffff647c),
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(22.5)),
-                    )),
-                onPressed: () {
-                  //TODO: Screen to take user to.
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      primary: const Color(0xffff647c),
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(22.5)),
+                      )),
+                  onPressed: () {
+                    //TODO: Screen to take user to.
+                  },
+                  child: Row(
+                    children: const [
+                      Padding(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                        child: FaIcon(
+                          FontAwesomeIcons.solidComments,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 45.0),
+                        child: Text(
+                          'Start Chatting',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 27,
+              ),
+              GestureDetector(
+                onTap: () {
+                  //Show modalBottomSheet of Preference settings.
+                  showModalBottomSheet(
+                      useRootNavigator: true,
+                      backgroundColor: Colors.transparent,
+                      isScrollControlled: true,
+                      isDismissible: true,
+                      enableDrag: true,
+                      context: context,
+                      builder: (context) {
+                        return PreferenceWidget();
+                      });
                 },
                 child: Row(
-                  children: const [
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                      child: FaIcon(
-                        FontAwesomeIcons.solidComments,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Search preferences',
+                      style: GoogleFonts.poppins(
+                        fontSize: 12,
+                        color: const Color(0xffff647c),
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 45.0),
-                      child: Text(
-                        'Start Chatting',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.w600),
-                      ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    const FaIcon(
+                      FontAwesomeIcons.sliders,
+                      size: 10,
+                      color: Color(0xffff647c),
                     ),
                   ],
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 27,
-            ),
-            GestureDetector(
-              onTap: () {
-                //Show modalBottomSheet of Preference settings.
-                showModalBottomSheet(
-                    useRootNavigator: true,
-                    backgroundColor: Colors.transparent,
-                    isScrollControlled: true,
-                    isDismissible: true,
-                    enableDrag: true,
-                    context: context,
-                    builder: (context) {
-                      return PreferenceWidget();
-                    });
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Search preferences',
-                    style: GoogleFonts.poppins(
-                      fontSize: 12,
-                      color: const Color(0xffff647c),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  const FaIcon(
-                    FontAwesomeIcons.sliders,
-                    size: 10,
-                    color: Color(0xffff647c),
-                  ),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
