@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:privatechat/constants/constants.dart';
 
 class Message {
   Message(
@@ -8,7 +9,7 @@ class Message {
       required this.timeStamp,
       required this.message,
       this.photoUrl});
-      
+
   //to send photo message
   Message.photoMessage(
       {required this.senderId,
@@ -24,7 +25,7 @@ class Message {
   final int timeStamp;
   final String? photoUrl;
 
-   toMap() {
+  toMap() {
     return <String, dynamic>{
       'senderId': senderId,
       'recieverId': recieverId,
@@ -43,5 +44,30 @@ class Message {
       timeStamp: map?['timeStamp'] ?? '',
       type: map?['type'] ?? '',
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      FirestoreConstants.idFrom: senderId,
+      FirestoreConstants.idTo: recieverId,
+      FirestoreConstants.timestamp: timeStamp,
+      FirestoreConstants.content: message,
+      FirestoreConstants.type: type,
+    };
+  }
+
+  factory Message.fromDocument(DocumentSnapshot documentSnapshot) {
+    String idFrom = documentSnapshot.get(FirestoreConstants.idFrom);
+    String idTo = documentSnapshot.get(FirestoreConstants.idTo);
+    int timestamp = documentSnapshot.get(FirestoreConstants.timestamp);
+    String content = documentSnapshot.get(FirestoreConstants.content);
+    String type = documentSnapshot.get(FirestoreConstants.type);
+
+    return Message(
+        senderId: idFrom,
+        recieverId: idTo,
+        timeStamp: timestamp,
+        message: content,
+        type: type);
   }
 }

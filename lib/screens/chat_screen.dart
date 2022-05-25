@@ -1,5 +1,11 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:privatechat/constants/constants.dart';
+import 'package:privatechat/controllers/chat.controller.dart';
 import 'package:privatechat/models/message.dart';
 
 import 'package:privatechat/models/user.dart';
@@ -8,10 +14,10 @@ import 'package:privatechat/services.dart/database.dart';
 import 'package:privatechat/controllers/themeNotifier.dart';
 
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
+import 'package:privatechat/widgets/common_widgets.dart';
 
 import 'package:privatechat/widgets/list_item_builder.dart';
 import 'package:privatechat/widgets/message_bubble.dart';
-
 
 import 'package:provider/provider.dart';
 
@@ -38,6 +44,7 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  String? currentUserId;
   Future<void> secureScreen() async {
     await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
   }
@@ -48,13 +55,29 @@ class _ChatScreenState extends State<ChatScreen> {
 
   final key = GlobalKey<ScaffoldState>();
 
+  int _limit = 20;
+  final int _limitIncrement = 20;
+
+  File? imageFile;
+  String imageUrl = '';
+  bool isLoading = false;
+  bool isShowSticker = false;
+
+  String groupChatId = '';
+
   TextEditingController textEditingController = TextEditingController();
+  final ScrollController scrollController = ScrollController();
+  final FocusNode focusNode = FocusNode();
   final controller = ScrollController();
   double position = 0;
 
+  ChatController? chatController;
+
   @override
   void initState() {
+    secureScreen();
     super.initState();
+    chatController = context.read<ChatController>();
 
     if (controller.hasClients) {
       controller.animateTo(
@@ -63,6 +86,46 @@ class _ChatScreenState extends State<ChatScreen> {
         duration: const Duration(milliseconds: 500),
       );
     }
+    // focusNode.addListener(onFocusChanged);
+    // scrollController.addListener(_scrollListener);
+    readLocal();
+  }
+
+  _scrollListener() {
+    if (scrollController.offset >= scrollController.position.maxScrollExtent &&
+        !scrollController.position.outOfRange) {
+      setState(() {
+        _limit += _limitIncrement;
+      });
+    }
+  }
+
+  void onFocusChanged() {
+    if (focusNode.hasFocus) {
+      setState(() {
+        isShowSticker = false;
+      });
+    }
+  }
+
+  void readLocal() {
+    // if (authProvider.getFirebaseUserId()?.isNotEmpty == true) {
+    //   currentUserId = authProvider.getFirebaseUserId()!;
+    // } else {
+    //   Navigator.of(context).pushAndRemoveUntil(
+    //       MaterialPageRoute(builder: (context) => const LoginPage()),
+    //       (Route<dynamic> route) => false);
+    // }
+    // if (currentUserId.compareTo(widget.reciever.id) > 0) {
+    //   groupChatId = '$currentUserId - ${widget.reciever.id}';
+    // } else {
+    //   groupChatId = '${widget.reciever.id} - $currentUserId';
+    // }
+    final auth = Provider.of<AuthBase>(context, listen: false);
+    chatController!.updateFirestoreData(
+        FirestoreConstants.pathUserCollection,
+        auth.currentUser!.uid,
+        {FirestoreConstants.chattingWith: widget.reciever.id});
   }
 
   sendMessage() {
@@ -82,12 +145,12 @@ class _ChatScreenState extends State<ChatScreen> {
     widget.db.writeMessage(_message, auth.currentUser!, widget.reciever);
   }
 
-  @override
-  void initState() {
-    secureScreen();
-    // TODO: implement initState
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   secureScreen();
+  //   // TODO: implement initState
+  //   super.initState();
+  // }
 
   @override
   void dispose() {
@@ -95,6 +158,79 @@ class _ChatScreenState extends State<ChatScreen> {
     // TODO: implement dispose
     super.dispose();
   }
+
+  Future getImage() async {
+    ImagePicker imagePicker = ImagePicker();
+    XFile? pickedFile;
+    pickedFile = await imagePicker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      imageFile = File(pickedFile.path);
+      if (imageFile != null) {
+        setState(() {
+          isLoading = true;
+        });
+        uploadImageFile();
+      }
+    }
+  }
+
+  void uploadImageFile() async {
+    String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+    UploadTask uploadTask =
+        chatController!.uploadImageFile(imageFile!, fileName);
+    try {
+      TaskSnapshot snapshot = await uploadTask;
+      imageUrl = await snapshot.ref.getDownloadURL();
+      setState(() {
+        isLoading = false;
+        onSendMessage(imageUrl, MessageType.image);
+      });
+    } on FirebaseException catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      // Fluttertoast.showToast(msg: e.message ?? e.toString());
+    }
+  }
+
+  void onSendMessage(String content, String type) {
+    final auth = Provider.of<AuthBase>(context, listen: false);
+
+    final _senderId = auth.currentUser!.uid;
+    if (content.trim().isNotEmpty) {
+      textEditingController.clear();
+      chatController!.sendChatMessage(
+          content, type, groupChatId, _senderId, widget.reciever.id);
+      scrollController.animateTo(0,
+          duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
+    } else {
+      // Fluttertoast.showToast(
+      //     msg: 'Nothing to send', backgroundColor: Colors.grey);
+    }
+  }
+
+  // bool isMessageReceived(int index) {
+  //   if ((index > 0 &&
+  //           listMessages[index - 1].get(FirestoreConstants.idFrom) ==
+  //               currentUserId) ||
+  //       index == 0) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
+
+  // // checking if sent message
+  // bool isMessageSent(int index) {
+  //   if ((index > 0 &&
+  //           listMessages[index - 1].get(FirestoreConstants.idFrom) !=
+  //               currentUserId) ||
+  //       index == 0) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -253,6 +389,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               isSender:
                                   auth.currentUser!.uid == message.senderId,
                               text: message.message,
+                              imageText: message.type == '1',
                             ));
                   }),
             ),
@@ -300,8 +437,12 @@ class _ChatScreenState extends State<ChatScreen> {
                   : const Color(0xffF5F5F5),
               filled: true,
               prefixIcon: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.photo_camera_rounded)),
+                onPressed: getImage,
+                icon: const Icon(
+                  Icons.camera_alt,
+                  size: Sizes.dimen_28,
+                ),
+              ),
               suffixIcon: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -313,7 +454,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         await sendMessage();
                         textEditingController.clear();
                         controller.animateTo(
-                          controller.position.maxScrollExtent ,
+                          controller.position.maxScrollExtent,
                           curve: Curves.easeOut,
                           duration: const Duration(milliseconds: 500),
                         );
