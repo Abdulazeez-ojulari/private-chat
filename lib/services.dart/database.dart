@@ -1,9 +1,13 @@
 //Handle CRUD operations in this file
 
+
+
 import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:privatechat/models/message.dart';
 import 'package:privatechat/models/user.dart';
 import 'package:privatechat/services.dart/api_path.dart';
+
 import 'package:privatechat/services.dart/firestore.dart';
 
 abstract class DataBase {
@@ -11,7 +15,11 @@ abstract class DataBase {
   Stream<List<UserModel>> usersStream(User user);
   Future<void> writeMessage(Message message, User sender, UserModel reciever);
   Stream<List<Message>> messagesStream(String senderId, String recieverId);
+  Future<void> writePhotoMessage(Message message, User sender, UserModel reciever);
 }
+
+
+
 
 class FirestorDatabase implements DataBase {
   FirestorDatabase(this.uid);
@@ -58,4 +66,17 @@ class FirestorDatabase implements DataBase {
           builder: (data, documetId) {
             return Message.fromMap(data);
           });
+
+  @override
+  Future<void> writePhotoMessage(Message message, User sender, UserModel reciever) async {
+     var map = message.toMap();
+
+    await _firestoreService.setCollection(
+        path: APIPath.messages(id1: sender.uid, id2: reciever.id), data: map);
+    return await _firestoreService.setCollection(
+        path: APIPath.messages(id1: reciever.id, id2: sender.uid), data: map);
+  }
 }
+
+
+

@@ -5,7 +5,7 @@ Widget errorContainer() {
   return Container(
     clipBehavior: Clip.hardEdge,
     child: Image.asset(
-      'assets/images/img_not_available.jpeg',
+      'images/google_logo.png',
       height: Sizes.dimen_200,
       width: Sizes.dimen_200,
     ),

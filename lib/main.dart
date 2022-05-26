@@ -4,6 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:privatechat/controllers/chat.controller.dart';
+import 'package:privatechat/services.dart/storage.dart';
 import 'screens/new_home/new_home_page.dart';
 import 'package:privatechat/screens/landing_page.dart';
 import 'package:privatechat/services.dart/auth.dart';
@@ -59,11 +60,7 @@ class _MyAppState extends State<MyApp> {
           Provider<AuthBase>(
             create: (_) => Auth(),
           ),
-          Provider<ChatController>(
-            create: (_) => ChatController(
-                firebaseFirestore: FirebaseFirestore.instance,
-                firebaseStorage: FirebaseStorage.instance),
-          ),
+           Provider<Storage>(create: (_) => FirestoreStorage(),)
         ],
         builder: (context, child) {
           return const MaterialApp(

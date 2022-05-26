@@ -1,51 +1,46 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:privatechat/constants/constants.dart';
+import 'package:privatechat/screens/image_screen.dart';
 
 class MessageBubble extends StatelessWidget {
   const MessageBubble(
       {Key? key,
       required this.isSender,
       required this.text,
-      required this.imageText})
+      required this.isImageText,
+      this.imageUrl})
       : super(key: key);
   final bool isSender;
   final String text;
-  final bool imageText;
+  final bool isImageText;
+  final String? imageUrl;
 
   @override
   Widget build(BuildContext context) {
+    debugPrint(imageUrl);
     return Align(
       alignment: isSender ? Alignment.centerRight : Alignment.centerLeft,
-      child: imageText
-          ? Image.network(
-              text,
-              width: Sizes.dimen_200,
-              height: Sizes.dimen_200,
-              fit: BoxFit.cover,
-              loadingBuilder: (BuildContext ctx, Widget child,
-                  ImageChunkEvent? loadingProgress) {
-                if (loadingProgress == null) return child;
-                return Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.greyColor2,
-                    borderRadius: BorderRadius.circular(Sizes.dimen_10),
+      child: isImageText
+          ? Padding(
+              padding: const EdgeInsets.only(top: 20.0, right: 5, left: 5),
+              child: GestureDetector(
+                onTap: () => ImageScreen.show(context, imageUrl!),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: CachedNetworkImage(
+                    imageUrl: imageUrl!,
+                    placeholder: (context, image) =>
+                        const Center(child: CircularProgressIndicator()),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
+                    width: Sizes.dimen_200,
+                    height: Sizes.dimen_200,
+                    fit: BoxFit.cover,
                   ),
-                  width: Sizes.dimen_200,
-                  height: Sizes.dimen_200,
-                  child: Center(
-                    child: CircularProgressIndicator(
-                      color: AppColors.burgundy,
-                      value: loadingProgress.expectedTotalBytes != null &&
-                              loadingProgress.expectedTotalBytes != null
-                          ? loadingProgress.cumulativeBytesLoaded /
-                              loadingProgress.expectedTotalBytes!
-                          : null,
-                    ),
-                  ),
-                );
-              },
-              errorBuilder: (context, object, stackTrace) => errorContainer(),
+                ),
+              ),
             )
           : Container(
               margin: const EdgeInsets.only(top: 20, right: 5, left: 5),
@@ -79,9 +74,10 @@ class MessageBubble extends StatelessWidget {
 
 Widget errorContainer() {
   return Container(
+    decoration: BoxDecoration(),
     clipBehavior: Clip.hardEdge,
     child: Image.asset(
-      'assets/images/img_not_available.jpeg',
+      'images/google_logo.png',
       height: Sizes.dimen_200,
       width: Sizes.dimen_200,
     ),

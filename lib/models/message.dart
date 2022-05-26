@@ -17,11 +17,11 @@ class Message {
       required this.type,
       required this.timeStamp,
       required this.photoUrl,
-      required this.message});
+       this.message});
   final String senderId;
   final String recieverId;
   final String type;
-  final String message;
+  final String? message;
   final int timeStamp;
   final String? photoUrl;
 
@@ -43,31 +43,10 @@ class Message {
       recieverId: map?['recieverId'] ?? '',
       timeStamp: map?['timeStamp'] ?? '',
       type: map?['type'] ?? '',
+      photoUrl: map?['photoUrl'] ?? ''
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      FirestoreConstants.idFrom: senderId,
-      FirestoreConstants.idTo: recieverId,
-      FirestoreConstants.timestamp: timeStamp,
-      FirestoreConstants.content: message,
-      FirestoreConstants.type: type,
-    };
-  }
 
-  factory Message.fromDocument(DocumentSnapshot documentSnapshot) {
-    String idFrom = documentSnapshot.get(FirestoreConstants.idFrom);
-    String idTo = documentSnapshot.get(FirestoreConstants.idTo);
-    int timestamp = documentSnapshot.get(FirestoreConstants.timestamp);
-    String content = documentSnapshot.get(FirestoreConstants.content);
-    String type = documentSnapshot.get(FirestoreConstants.type);
-
-    return Message(
-        senderId: idFrom,
-        recieverId: idTo,
-        timeStamp: timestamp,
-        message: content,
-        type: type);
-  }
+ 
 }
