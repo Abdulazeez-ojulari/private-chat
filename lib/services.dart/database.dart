@@ -41,7 +41,7 @@ class FirestorDatabase implements DataBase {
         'userId': user?.id ?? '',
         'email': user?.email ?? '',
         'name': user?.name ?? '',
-        'createdAt': DateTime.now().millisecondsSinceEpoch,
+        'createdAt': user?.createdAt ?? '',
         'photoURL': user?.photoUrl ?? '',
         'lastMessageTime': time
       });
