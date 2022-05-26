@@ -1,18 +1,16 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:privatechat/constants/constants.dart';
 import 'package:privatechat/models/message.dart';
-
 import 'package:privatechat/models/user.dart';
 import 'package:privatechat/services.dart/auth.dart';
 import 'package:privatechat/services.dart/database.dart';
 import 'package:privatechat/controllers/themeNotifier.dart';
-
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
-
+import 'package:privatechat/services.dart/storage.dart';
 import 'package:privatechat/widgets/list_item_builder.dart';
 import 'package:privatechat/widgets/message_bubble.dart';
-
-
 import 'package:provider/provider.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -38,6 +36,7 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  String? currentUserId;
   Future<void> secureScreen() async {
     await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
   }
@@ -48,12 +47,53 @@ class _ChatScreenState extends State<ChatScreen> {
 
   final key = GlobalKey<ScaffoldState>();
 
+  int _limit = 20;
+  final int _limitIncrement = 20;
+
+  String imageUrl = '';
+  bool isLoading = false;
+  bool isShowSticker = false;
+
+  String groupChatId = '';
+
   TextEditingController textEditingController = TextEditingController();
+  final ScrollController scrollController = ScrollController();
+  final FocusNode focusNode = FocusNode();
   final controller = ScrollController();
   double position = 0;
 
- 
-  sendMessage() {
+  @override
+  void initState() {
+    secureScreen();
+    super.initState();
+
+    if (controller.hasClients) {
+      controller.animateTo(
+        controller.position.maxScrollExtent,
+        curve: Curves.easeOut,
+        duration: const Duration(milliseconds: 500),
+      );
+    }
+  }
+
+  _scrollListener() {
+    if (scrollController.offset >= scrollController.position.maxScrollExtent &&
+        !scrollController.position.outOfRange) {
+      setState(() {
+        _limit += _limitIncrement;
+      });
+    }
+  }
+
+  void onFocusChanged() {
+    if (focusNode.hasFocus) {
+      setState(() {
+        isShowSticker = false;
+      });
+    }
+  }
+
+  void sendMessage() {
     final text = textEditingController.text.trim();
 
     final auth = Provider.of<AuthBase>(context, listen: false);
@@ -67,26 +107,50 @@ class _ChatScreenState extends State<ChatScreen> {
         timeStamp: DateTime.now().millisecondsSinceEpoch,
         type: 'text');
 
-    widget.db.writeMessage(_message, auth.currentUser!, widget.reciever);
-  }
-
-  @override
-  void initState() {
-    secureScreen();
-
-    super.initState();
+    try {
+      widget.db.writeMessage(_message, auth.currentUser!, widget.reciever);
+    } on FirebaseException catch (e) {
+      //Hnalde Possible errors
+    }
   }
 
   @override
   void dispose() {
-    clearSecureScreen();
-    // TODO: implement dispose
     super.dispose();
+    clearSecureScreen();
+  }
+
+  void sendPhotoMessage(File imageFile) async {
+    final storage = context.read<Storage>();
+    final auth = Provider.of<AuthBase>(context, listen: false);
+    final senderId = auth.currentUser!.uid;
+    final recieverId = widget.reciever.id;
+
+    String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+    UploadTask uploadTask = await storage.uploadImageFile(imageFile, fileName);
+    try {
+      TaskSnapshot snapshot = await uploadTask;
+      imageUrl = await snapshot.ref.getDownloadURL();
+      final _message = Message.photoMessage(
+          senderId: senderId,
+          photoUrl: imageUrl,
+          type: 'image',
+          timeStamp: DateTime.now().millisecondsSinceEpoch,
+          recieverId: recieverId);
+
+      widget.db.writePhotoMessage(_message, auth.currentUser!, widget.reciever);
+    } on FirebaseException catch (e) {
+      //Handle possible errors
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<AuthBase>(context, listen: false);
+    final storage = context.read<Storage>();
     return Theme(
       data: Theme.of(context).copyWith(
           inputDecorationTheme: InputDecorationTheme(
@@ -238,23 +302,25 @@ class _ChatScreenState extends State<ChatScreen> {
                         controller: controller,
                         snapshot: snapshot,
                         itemBuilder: (context, message) => MessageBubble(
+                              imageUrl: message.photoUrl ?? '',
                               isSender:
                                   auth.currentUser!.uid == message.senderId,
-                              text: message.message,
+                              text: message.message!,
+                              isImageText: message.type == 'image',
                             ));
                   }),
             ),
             const SizedBox(
               height: 10,
             ),
-            _customTextField(context),
+            _customTextField(context, storage),
           ],
         ),
       ),
     );
   }
 
-  Widget _customTextField(BuildContext context) {
+  Widget _customTextField(BuildContext context, Storage storage) {
     return SizedBox(
       height: 70,
       child: Padding(
@@ -288,20 +354,28 @@ class _ChatScreenState extends State<ChatScreen> {
                   : const Color(0xffF5F5F5),
               filled: true,
               prefixIcon: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.photo_camera_rounded)),
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.camera_alt,
+                  size: Sizes.dimen_28,
+                ),
+              ),
               suffixIcon: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   IconButton(onPressed: () {}, icon: const Icon(Icons.mic)),
                   IconButton(
-                      onPressed: () {}, icon: const Icon(Icons.photo_outlined)),
-                  IconButton(
                       onPressed: () async {
-                        await sendMessage();
+                        final imageFile = await storage.getImage();
+                        sendPhotoMessage(imageFile);
+                      },
+                      icon: const Icon(Icons.photo_outlined)),
+                  IconButton(
+                      onPressed: () {
+                        sendMessage();
                         textEditingController.clear();
                         controller.animateTo(
-                          controller.position.maxScrollExtent ,
+                          controller.position.maxScrollExtent,
                           curve: Curves.easeOut,
                           duration: const Duration(milliseconds: 500),
                         );

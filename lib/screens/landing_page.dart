@@ -7,6 +7,7 @@ import 'package:privatechat/screens/sign_in_page.dart';
 import 'package:privatechat/services.dart/auth.dart';
 import 'package:privatechat/services.dart/database.dart';
 import 'package:privatechat/controllers/themeNotifier.dart';
+import 'package:privatechat/services.dart/storage.dart';
 import 'package:provider/provider.dart';
 
 class LandingPage extends StatelessWidget {
@@ -27,9 +28,18 @@ class LandingPage extends StatelessWidget {
               return SignInPage.create(context);
             }
 
-            return Provider<DataBase>(
-                create: (_) => FirestorDatabase(user.uid),
-                child: const NewHomePage());
+            return MultiProvider(
+              providers: [
+                Provider<DataBase>(
+                    create: (_) => FirestorDatabase(user.uid)
+                    ),
+                Provider<Storage>(create: (_) => FirestoreStorage(),)
+              ],
+              builder: (context, child) {
+                return 
+                    const NewHomePage();
+              }
+            );
           }
           return Scaffold(
             backgroundColor: Provider.of<ThemeNotifier>(context).darkTheme
