@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:privatechat/constants/constants.dart';
+import 'package:privatechat/utils/time_format.dart';
 
 class Message {
   Message(
@@ -37,6 +38,7 @@ class Message {
   }
 
   factory Message.fromMap(Map<String, dynamic>? map) {
+    
     return Message(
       message: map?['message'] ?? '',
       senderId: map?['senderId'] ?? '',

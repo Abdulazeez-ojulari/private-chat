@@ -1,11 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'package:privatechat/services.dart/storage.dart';
-import 'screens/new_home/new_home_page.dart';
 import 'package:privatechat/screens/landing_page.dart';
 import 'package:privatechat/services.dart/auth.dart';
 import 'package:privatechat/controllers/themeNotifier.dart';

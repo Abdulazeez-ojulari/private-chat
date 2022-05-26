@@ -109,6 +109,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
     try {
       widget.db.writeMessage(_message, auth.currentUser!, widget.reciever);
+      widget.db.updateUserMessageTime(DateTime.now().millisecondsSinceEpoch, widget.reciever);
     } on FirebaseException catch (e) {
       //Hnalde Possible errors
     }
@@ -139,6 +140,7 @@ class _ChatScreenState extends State<ChatScreen> {
           recieverId: recieverId);
 
       widget.db.writePhotoMessage(_message, auth.currentUser!, widget.reciever);
+       widget.db.updateUserMessageTime(DateTime.now().millisecondsSinceEpoch, widget.reciever);
     } on FirebaseException catch (e) {
       //Handle possible errors
       setState(() {
@@ -299,6 +301,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       auth.currentUser!.uid, widget.reciever.id),
                   builder: (context, snapshot) {
                     return ListItemsBuilder<Message>(
+                        isReverse: true,
                         controller: controller,
                         snapshot: snapshot,
                         itemBuilder: (context, message) => MessageBubble(
@@ -374,11 +377,11 @@ class _ChatScreenState extends State<ChatScreen> {
                       onPressed: () {
                         sendMessage();
                         textEditingController.clear();
-                        controller.animateTo(
-                          controller.position.maxScrollExtent,
-                          curve: Curves.easeOut,
-                          duration: const Duration(milliseconds: 500),
-                        );
+                        // controller.animateTo(
+                        //   controller.position.maxScrollExtent,
+                        //   curve: Curves.easeOut,
+                        //   duration: const Duration(milliseconds: 500),
+                        // );
                       },
                       icon: const Icon(Icons.send)),
                 ],

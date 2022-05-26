@@ -11,11 +11,12 @@ class ListItemsBuilder<T> extends StatelessWidget {
       {Key? key,
       required this.snapshot,
       required this.itemBuilder,
-      required this.controller})
+      required this.controller,required this.isReverse})
       : super(key: key);
   final AsyncSnapshot<List> snapshot;
   final ItemWidgetBuilder<T> itemBuilder;
   final ScrollController controller;
+  final bool isReverse;
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +46,7 @@ class ListItemsBuilder<T> extends StatelessWidget {
     return ListView.builder(
         physics: const BouncingScrollPhysics(),
         controller: controller,
+        reverse: isReverse,
         itemCount: items.length,
         itemBuilder: (context, index) => itemBuilder(context, items[index]));
   }

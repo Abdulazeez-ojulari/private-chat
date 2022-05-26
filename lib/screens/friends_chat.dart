@@ -65,12 +65,15 @@ class _FriendsChatState extends State<FriendsChat> {
               child: StreamBuilder<List<UserModel>>(
                   stream: db.usersStream(auth.currentUser!),
                   builder: (context, snapshot) {
+                    debugPrint(db.usersStream(auth.currentUser!).toString());
                     return ListItemsBuilder<UserModel>(
+                        isReverse: false,
                         controller: controller,
                         snapshot: snapshot,
-                        itemBuilder: (context, userModel) => MessageListItem(
+                        itemBuilder: (context, userModel) => auth.currentUser!.uid == userModel.id ? Container() : MessageListItem(
                               friendName: userModel.name,
-                              stream: db.messagesStream(auth.currentUser!.uid, userModel.id),
+                              stream: db.messagesStream(
+                                  auth.currentUser!.uid, userModel.id),
                               friendImage: userModel.photoUrl,
                               onTap: () =>
                                   ChatScreen.show(context, db, userModel),
