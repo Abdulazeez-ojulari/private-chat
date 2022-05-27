@@ -28,18 +28,9 @@ class LandingPage extends StatelessWidget {
               return SignInPage.create(context);
             }
 
-            return MultiProvider(
-              providers: [
-                Provider<DataBase>(
-                    create: (_) => FirestorDatabase(user.uid)
-                    ),
-                Provider<Storage>(create: (_) => FirestoreStorage(),)
-              ],
-              builder: (context, child) {
-                return 
-                    const NewHomePage();
-              }
-            );
+            return Provider<DataBase>(
+                create: (_) => FirestorDatabase(user.uid),
+                child: const NewHomePage());
           }
           return Scaffold(
             backgroundColor: Provider.of<ThemeNotifier>(context).darkTheme
