@@ -4,11 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:privatechat/constants/constants.dart';
 import 'package:privatechat/models/message.dart';
 import 'package:privatechat/models/user.dart';
+import 'package:privatechat/screens/call_screen.dart';
+import 'package:privatechat/screens/pickup/pickup_layout.dart';
 import 'package:privatechat/services.dart/auth.dart';
 import 'package:privatechat/services.dart/database.dart';
 import 'package:privatechat/controllers/themeNotifier.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:privatechat/services.dart/storage.dart';
+import 'package:privatechat/utils/call.dart';
 import 'package:privatechat/widgets/list_item_builder.dart';
 import 'package:privatechat/widgets/message_bubble.dart';
 import 'package:provider/provider.dart';
@@ -109,7 +112,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
     try {
       widget.db.writeMessage(_message, auth.currentUser!, widget.reciever);
-      widget.db.updateUserMessageTime(DateTime.now().millisecondsSinceEpoch, widget.reciever);
+      widget.db.updateUserMessageTime(
+          DateTime.now().millisecondsSinceEpoch, widget.reciever);
     } on FirebaseException catch (e) {
       //Hnalde Possible errors
     }
@@ -140,7 +144,8 @@ class _ChatScreenState extends State<ChatScreen> {
           recieverId: recieverId);
 
       widget.db.writePhotoMessage(_message, auth.currentUser!, widget.reciever);
-       widget.db.updateUserMessageTime(DateTime.now().millisecondsSinceEpoch, widget.reciever);
+      widget.db.updateUserMessageTime(
+          DateTime.now().millisecondsSinceEpoch, widget.reciever);
     } on FirebaseException catch (e) {
       //Handle possible errors
       setState(() {
@@ -152,6 +157,12 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<AuthBase>(context, listen: false);
+    final name = auth.currentUser!.displayName ?? '';
+    UserModel sender = UserModel(
+      id: auth.currentUser!.uid,
+      name: name,
+      photoUrl: auth.currentUser!.photoURL,
+    );
     final storage = context.read<Storage>();
     return Theme(
       data: Theme.of(context).copyWith(
@@ -173,151 +184,157 @@ class _ChatScreenState extends State<ChatScreen> {
                 ? const Color(0xff201F24)
                 : const Color(0xfff1f1f1),
           )),
-      child: Scaffold(
-        key: key,
-        resizeToAvoidBottomInset: true,
-        backgroundColor: Provider.of<ThemeNotifier>(context).darkTheme
-            ? const Color(0xff201F24)
-            : const Color(0xfff1f1f1),
-        appBar: AppBar(
-            backgroundColor: Provider.of<ThemeNotifier>(context).darkTheme
-                ? const Color(0xff201F24)
-                : const Color(0xfff1f1f1),
-            elevation: 0.0,
-            leading: GestureDetector(
-              onTap: () {
-                Navigator.of(context).pop();
-              },
-              child: Row(
-                children: [
-                  const Icon(
-                    Icons.arrow_back_ios_new_rounded,
-                    size: 16,
-                    color: Colors.pinkAccent,
-                  ),
-                  ClipRRect(
-                    borderRadius: const BorderRadius.all(Radius.circular(25)),
-                    child: Image.network(
-                      widget.reciever.photoUrl ?? '',
-                      height: 30,
-                      width: 30,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            title: Text(
-              widget.reciever.name,
-              style: TextStyle(
-                fontSize: 14.0,
-                color: Provider.of<ThemeNotifier>(context).darkTheme
-                    ? Colors.white
-                    : Colors.black,
-              ),
-            ),
-            actions: [
-              const IconButton(
-                  onPressed: null,
-                  icon: Icon(
-                    Icons.call,
-                    color: Colors.pinkAccent,
-                  )),
-              const IconButton(
-                  onPressed: null,
-                  icon: Icon(
-                    Icons.video_call,
-                    color: Colors.pinkAccent,
-                  )),
-              PopupMenuButton(
-                elevation: 5,
-                color: Provider.of<ThemeNotifier>(context).darkTheme
-                    ? const Color(0xff201F24)
-                    : const Color(0xfff1f1f1),
-                child: const Center(
-                    child: Icon(
-                  Icons.more_vert,
-                  color: Colors.pinkAccent,
-                )),
-                itemBuilder: (context) {
-                  return [
-                    PopupMenuItem(
-                      child: TextButton(
-                        onPressed: null,
-                        child: Row(
-                          children: [
-                            const Icon(
-                              Icons.person_add,
-                              color: Colors.green,
-                            ),
-                            Text(
-                              '  Add friend',
-                              style: TextStyle(
-                                color: Provider.of<ThemeNotifier>(context,
-                                            listen: false)
-                                        .darkTheme
-                                    ? Colors.white
-                                    : Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    PopupMenuItem(
-                      child: TextButton(
-                        onPressed: () {
-                          auth.signOut();
-                        },
-                        child: Row(
-                          children: [
-                            const Icon(
-                              Icons.report_problem,
-                              color: Colors.red,
-                            ),
-                            Text(
-                              '  Report User',
-                              style: TextStyle(
-                                color: Provider.of<ThemeNotifier>(context,
-                                            listen: false)
-                                        .darkTheme
-                                    ? Colors.white
-                                    : Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ];
+      child: PickupLayout(
+        scaffold: Scaffold(
+          key: key,
+          resizeToAvoidBottomInset: true,
+          backgroundColor: Provider.of<ThemeNotifier>(context).darkTheme
+              ? const Color(0xff201F24)
+              : const Color(0xfff1f1f1),
+          appBar: AppBar(
+              backgroundColor: Provider.of<ThemeNotifier>(context).darkTheme
+                  ? const Color(0xff201F24)
+                  : const Color(0xfff1f1f1),
+              elevation: 0.0,
+              leading: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop();
                 },
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.arrow_back_ios_new_rounded,
+                      size: 16,
+                      color: Colors.pinkAccent,
+                    ),
+                    ClipRRect(
+                      borderRadius: const BorderRadius.all(Radius.circular(25)),
+                      child: Image.network(
+                        widget.reciever.photoUrl ?? '',
+                        height: 30,
+                        width: 30,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ]),
-        body: Column(
-          children: [
-            Expanded(
-              flex: 5,
-              child: StreamBuilder<List<Message>>(
-                  stream: widget.db.messagesStream(
-                      auth.currentUser!.uid, widget.reciever.id),
-                  builder: (context, snapshot) {
-                    return ListItemsBuilder<Message>(
-                        isReverse: true,
-                        controller: controller,
-                        snapshot: snapshot,
-                        itemBuilder: (context, message) => MessageBubble(
-                              imageUrl: message.photoUrl ?? '',
-                              isSender:
-                                  auth.currentUser!.uid == message.senderId,
-                              text: message.message!,
-                              isImageText: message.type == 'image',
-                            ));
-                  }),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            _customTextField(context, storage),
-          ],
+              title: Text(
+                widget.reciever.name,
+                style: TextStyle(
+                  fontSize: 14.0,
+                  color: Provider.of<ThemeNotifier>(context).darkTheme
+                      ? Colors.white
+                      : Colors.black,
+                ),
+              ),
+              actions: [
+                IconButton(
+                    onPressed: () async => CallUtils.dial(
+                          from: sender,
+                          to: widget.reciever,
+                          context: context,
+                        ),
+                    icon: const Icon(
+                      Icons.call,
+                      color: Colors.pinkAccent,
+                    )),
+                const IconButton(
+                    onPressed: null,
+                    icon: Icon(
+                      Icons.video_call,
+                      color: Colors.pinkAccent,
+                    )),
+                PopupMenuButton(
+                  elevation: 5,
+                  color: Provider.of<ThemeNotifier>(context).darkTheme
+                      ? const Color(0xff201F24)
+                      : const Color(0xfff1f1f1),
+                  child: const Center(
+                      child: Icon(
+                    Icons.more_vert,
+                    color: Colors.pinkAccent,
+                  )),
+                  itemBuilder: (context) {
+                    return [
+                      PopupMenuItem(
+                        child: TextButton(
+                          onPressed: null,
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.person_add,
+                                color: Colors.green,
+                              ),
+                              Text(
+                                '  Add friend',
+                                style: TextStyle(
+                                  color: Provider.of<ThemeNotifier>(context,
+                                              listen: false)
+                                          .darkTheme
+                                      ? Colors.white
+                                      : Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      PopupMenuItem(
+                        child: TextButton(
+                          onPressed: () {
+                            auth.signOut();
+                          },
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.report_problem,
+                                color: Colors.red,
+                              ),
+                              Text(
+                                '  Report User',
+                                style: TextStyle(
+                                  color: Provider.of<ThemeNotifier>(context,
+                                              listen: false)
+                                          .darkTheme
+                                      ? Colors.white
+                                      : Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ];
+                  },
+                ),
+              ]),
+          body: Column(
+            children: [
+              Expanded(
+                flex: 5,
+                child: StreamBuilder<List<Message>>(
+                    stream: widget.db.messagesStream(
+                        auth.currentUser!.uid, widget.reciever.id),
+                    builder: (context, snapshot) {
+                      return ListItemsBuilder<Message>(
+                          isReverse: true,
+                          controller: controller,
+                          snapshot: snapshot,
+                          itemBuilder: (context, message) => MessageBubble(
+                                imageUrl: message.photoUrl ?? '',
+                                isSender:
+                                    auth.currentUser!.uid == message.senderId,
+                                text: message.message!,
+                                isImageText: message.type == 'image',
+                              ));
+                    }),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              _customTextField(context, storage),
+            ],
+          ),
         ),
       ),
     );

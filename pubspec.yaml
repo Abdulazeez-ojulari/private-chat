@@ -47,6 +47,8 @@ dependencies:
   provider: ^6.0.2
   shared_preferences: ^2.0.15
   flutter_windowmanager: ^0.2.0
+  agora_rtc_engine: ^5.2.0
+  http: ^0.13.4
 dev_dependencies:
   flutter_test:
     sdk: flutter

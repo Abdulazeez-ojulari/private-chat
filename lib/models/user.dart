@@ -1,17 +1,24 @@
-
 import 'dart:math';
 
-class UserModel{
-  UserModel( {required this.name, required this.email, required this.id, this.photoUrl, required this.createdAt,required this.chattingWith, required this.lastMessageTime, });
+class UserModel {
+  UserModel({
+    required this.name,
+    this.email,
+    required this.id,
+    this.photoUrl,
+    this.createdAt,
+    this.chattingWith,
+    this.lastMessageTime,
+  });
   final String name;
-  final String email;
+  final String? email;
   final String? photoUrl;
-  final String createdAt;
+  final String? createdAt;
   final String? chattingWith;
   final String id;
-  final int lastMessageTime;
+  final int? lastMessageTime;
 
-  factory UserModel.fromMap(Map<String, dynamic>? data, String documentId){
+  factory UserModel.fromMap(Map<String, dynamic>? data, String documentId) {
     final name = data?['name'] ?? '';
     final email = data?['email'] ?? '';
     final photoUrl = data?['photoURL'] ?? '';
@@ -20,14 +27,12 @@ class UserModel{
     final lastMessageTime = data?['lastMessageTime'] ?? '';
 
     return UserModel(
-      name: name,
-      email: email,
-      id: documentId,
-      chattingWith: chattingWith,
-      createdAt: createdAt,
-      photoUrl: photoUrl,
-  lastMessageTime: lastMessageTime
-    );
+        name: name,
+        email: email,
+        id: documentId,
+        chattingWith: chattingWith,
+        createdAt: createdAt,
+        photoUrl: photoUrl,
+        lastMessageTime: lastMessageTime);
   }
-
 }
