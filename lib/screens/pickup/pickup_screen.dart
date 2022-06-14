@@ -41,7 +41,6 @@ class PickupScreen extends StatelessWidget {
                 fontSize: 20,
               ),
             ),
-            const SizedBox(height: 75),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -56,15 +55,12 @@ class PickupScreen extends StatelessWidget {
                 IconButton(
                   icon: const Icon(Icons.call),
                   color: Colors.green,
-                  onPressed: () async =>
-                      await Permissions.cameraAndMicrophonePermissionsGranted()
-                          ? Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => CallScreen(call: call),
-                              ),
-                            )
-                          : {},
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CallScreen(call: call),
+                    ),
+                  ),
                 ),
               ],
             ),
