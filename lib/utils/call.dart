@@ -12,16 +12,18 @@ class CallUtils {
 
   static dial({required UserModel from, required UserModel to, context}) async {
     // int id = DateTime.now().millisecondsSinceEpoch;
-    int ran = Random().nextInt(2000000000);
+    String channelId = Random().nextInt(2000000000).toString();
+    int callId = Random().nextInt(2000000000);
     Call call = Call(
-      callerId: from.id,
-      callerName: from.name,
-      callerPic: from.photoUrl,
-      receiverId: to.id,
-      receiverName: to.name,
-      receiverPic: to.photoUrl,
-      channelId: ran,
-    );
+        callerId: from.id,
+        callId: callId,
+        callerName: from.name,
+        callerPic: from.photoUrl,
+        receiveId: callId,
+        receiverId: to.id,
+        receiverName: to.name,
+        receiverPic: to.photoUrl,
+        channelId: channelId);
 
     bool callMade = await callController.makeCall(call: call);
 

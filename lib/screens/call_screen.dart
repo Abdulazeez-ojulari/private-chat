@@ -45,7 +45,7 @@ class _State extends State<CallScreen> {
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController(text: widget.call.callerId);
+    _controller = TextEditingController(text: widget.call.channelId);
     _initEngine();
   }
 
@@ -56,7 +56,7 @@ class _State extends State<CallScreen> {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: convert.jsonEncode(
-          {'channelName': widget.call.callerId, 'uid': widget.call.channelId}),
+          {'channelName': widget.call.channelId, 'uid': widget.call.callId}),
     );
     if (response.statusCode == 200) {
       // If the server did return a 201 CREATED response,
@@ -76,7 +76,7 @@ class _State extends State<CallScreen> {
   }
 
   _initEngine() async {
-    _engine = await RtcEngine.createWithConfig(RtcEngineConfig(appId));
+    _engine = await RtcEngine.createWithContext(RtcEngineContext(appId));
     _addListeners();
     _joinChannel();
 
@@ -115,7 +115,7 @@ class _State extends State<CallScreen> {
     }
     if (res.token.isNotEmpty) {
       await _engine
-          .joinChannel(res.token, _controller.text, null, widget.call.channelId)
+          .joinChannel(res.token, _controller.text, null, widget.call.callId)
           .catchError((onError) {
         logSink.log('error ${onError.toString()}');
       });

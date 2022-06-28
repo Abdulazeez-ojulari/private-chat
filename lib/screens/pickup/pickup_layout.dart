@@ -25,8 +25,8 @@ class PickupLayout extends StatelessWidget {
               if (snapshot.hasData &&
                   snapshot.data!.data().toString().isNotEmpty) {
                 if (snapshot.data!.data() != null) {
-                  final Map<dynamic, dynamic> doc =
-                      snapshot.data!.data() as Map<dynamic, dynamic>;
+                  final Map<String, dynamic> doc =
+                      snapshot.data!.data() as Map<String, dynamic>;
                   Call call = Call.fromMap(doc);
 
                   if (call.hasDialled != null && call.hasDialled != true) {
