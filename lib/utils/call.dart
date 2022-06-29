@@ -19,7 +19,6 @@ class CallUtils {
         callId: callId,
         callerName: from.name,
         callerPic: from.photoUrl,
-        receiveId: callId,
         receiverId: to.id,
         receiverName: to.name,
         receiverPic: to.photoUrl,

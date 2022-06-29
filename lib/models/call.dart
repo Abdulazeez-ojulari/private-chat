@@ -4,7 +4,6 @@ class Call {
   String? callerName;
   String? callerPic;
   String? receiverId;
-  int receiveId;
   String? receiverName;
   String? receiverPic;
   String channelId;
@@ -16,7 +15,6 @@ class Call {
     this.callerName,
     this.callerPic,
     this.receiverId,
-    required this.receiveId,
     this.receiverName,
     this.receiverPic,
     required this.channelId,
@@ -31,7 +29,6 @@ class Call {
     callMap["caller_name"] = call.callerName;
     callMap["caller_pic"] = call.callerPic;
     callMap["receiver_id"] = call.receiverId;
-    callMap["receive_id"] = call.receiveId;
     callMap["receiver_name"] = call.receiverName;
     callMap["receiver_pic"] = call.receiverPic;
     callMap["channel_id"] = call.channelId;
@@ -58,7 +55,6 @@ class Call {
       callerName: callMap?["caller_name"],
       callerPic: callMap?["caller_pic"],
       receiverId: callMap?["receiver_id"],
-      receiveId: callMap?["receive_id"] ?? 0,
       receiverName: callMap?["receiver_name"],
       receiverPic: callMap?["receiver_pic"],
       channelId: callMap?["channel_id"],
